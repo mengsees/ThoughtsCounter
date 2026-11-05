@@ -5,54 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Thoughts Counter</title>
 <style>
-/* white ground, cool grey type, one emerald for everything that is data */
+/* mirrors mengchen.co: deep teal type, mint-grey gradient ground, one teal-green (#3d9479), pill outlines, soft borderless cards */
 :root{
-  --bg:#ffffff; --card:#ffffff; --ink:#4a4f55; --muted:#8a9097; --line:#e6e8ea;
-  --accent:#0f9f6e; --accent2:#0b7f58; --soft:#f4f5f6; --warn:#b4605a;
-  --grid:#eceef0; --bar:#a9e0c8; --barhi:#0f9f6e; --line1:#0b7f58; --tick:#0f9f6e;
+  --bg:#f3f4f4; --bg-image:linear-gradient(135deg,#f3f4f4 2%,#d5e5e5 49%,#e8eded 100%);
+  --card:rgba(255,255,255,.62); --ink:#0b303b; --muted:#56727a; --line:rgba(11,48,59,.14);
+  --accent:#3d9479; --accent2:#2c7560; --soft:rgba(255,255,255,.7); --warm:#ece8e3; --warn:#b4605a;
+  --grid:rgba(11,48,59,.09); --bar:#a8d3c4; --barhi:#3d9479; --line1:#2c7560; --tick:#3d9479;
   --on-accent:#ffffff;
-  --s-bg:#ffffff; --s-ink:#6b7177; --s-muted:#9aa0a6; --s-hint:#aeb3b8; --s-line:#dfe2e5;
-  --s-btn1:#f3f5f6; --s-btn2:#e8ebed; --s-btn-line:#d6dadd; --s-btn-ink:#4a4f55;
-  --s-down1:#d5f0e4; --s-down2:#bfe6d4; --s-glow:rgba(15,159,110,.10); --s-glow2:rgba(15,159,110,.26);
-  --s-ripple:rgba(15,159,110,.7); --s-flash:#0b7f58;
+  --s-bg:linear-gradient(135deg,#f3f4f4 2%,#d5e5e5 49%,#e8eded 100%); --s-ink:#33545d; --s-muted:#6c878e; --s-hint:#86a0a6; --s-line:rgba(11,48,59,.2);
+  --s-btn1:#fbfdfc; --s-btn2:#dfece8; --s-btn-line:#c3d9d3; --s-btn-ink:#0b303b;
+  --s-down1:#c9e6da; --s-down2:#b1d9c8; --s-glow:rgba(61,148,121,.12); --s-glow2:rgba(61,148,121,.28);
+  --s-ripple:rgba(61,148,121,.75); --s-flash:#2c7560;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#111314; --card:#181b1c; --ink:#d3d7da; --muted:#8e9499; --line:#2a2e30;
-    --accent:#2fc08c; --accent2:#5fd4a9; --soft:#202426; --warn:#d98a84;
-    --grid:#25292b; --bar:#25725a; --barhi:#2fc08c; --line1:#5fd4a9; --tick:#2fc08c;
-    --on-accent:#08130f;
-    --s-bg:#0d0f10; --s-ink:#a9afb4; --s-muted:#7b8186; --s-hint:#5d6367; --s-line:#2d3234;
-    --s-btn1:#1c2022; --s-btn2:#151819; --s-btn-line:#2f3538; --s-btn-ink:#c8cdd1;
-    --s-down1:#1f4a3b; --s-down2:#173a2e; --s-glow:rgba(47,192,140,.10); --s-glow2:rgba(47,192,140,.26);
-    --s-ripple:rgba(47,192,140,.7); --s-flash:#5fd4a9;
+    --bg:#0b1a1f; --bg-image:linear-gradient(135deg,#0b1a1f 2%,#10282d 49%,#0d1f24 100%);
+    --card:rgba(255,255,255,.05); --ink:#dbe9e8; --muted:#8aa5aa; --line:rgba(219,233,232,.14);
+    --accent:#4fb594; --accent2:#7ccfb3; --soft:rgba(255,255,255,.07); --warm:#16282c; --warn:#d98a84;
+    --grid:rgba(219,233,232,.09); --bar:#2b7560; --barhi:#4fb594; --line1:#7ccfb3; --tick:#4fb594;
+    --on-accent:#08201a;
+    --s-bg:#08151a; --s-ink:#a9c0c3; --s-muted:#7a9398; --s-hint:#5a7378; --s-line:rgba(219,233,232,.18);
+    --s-btn1:#15292e; --s-btn2:#0f2025; --s-btn-line:#24404a; --s-btn-ink:#d3e4e3;
+    --s-down1:#1d4a3f; --s-down2:#163a31; --s-glow:rgba(79,181,148,.10); --s-glow2:rgba(79,181,148,.26);
+    --s-ripple:rgba(79,181,148,.75); --s-flash:#7ccfb3;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#111314; --card:#181b1c; --ink:#d3d7da; --muted:#8e9499; --line:#2a2e30;
-  --accent:#2fc08c; --accent2:#5fd4a9; --soft:#202426; --warn:#d98a84;
-  --grid:#25292b; --bar:#25725a; --barhi:#2fc08c; --line1:#5fd4a9; --tick:#2fc08c;
-  --on-accent:#08130f;
-  --s-bg:#0d0f10; --s-ink:#a9afb4; --s-muted:#7b8186; --s-hint:#5d6367; --s-line:#2d3234;
-  --s-btn1:#1c2022; --s-btn2:#151819; --s-btn-line:#2f3538; --s-btn-ink:#c8cdd1;
-  --s-down1:#1f4a3b; --s-down2:#173a2e; --s-glow:rgba(47,192,140,.10); --s-glow2:rgba(47,192,140,.26);
-  --s-ripple:rgba(47,192,140,.7); --s-flash:#5fd4a9;
+  --bg:#0b1a1f; --bg-image:linear-gradient(135deg,#0b1a1f 2%,#10282d 49%,#0d1f24 100%);
+  --card:rgba(255,255,255,.05); --ink:#dbe9e8; --muted:#8aa5aa; --line:rgba(219,233,232,.14);
+  --accent:#4fb594; --accent2:#7ccfb3; --soft:rgba(255,255,255,.07); --warm:#16282c; --warn:#d98a84;
+  --grid:rgba(219,233,232,.09); --bar:#2b7560; --barhi:#4fb594; --line1:#7ccfb3; --tick:#4fb594;
+  --on-accent:#08201a;
+  --s-bg:#08151a; --s-ink:#a9c0c3; --s-muted:#7a9398; --s-hint:#5a7378; --s-line:rgba(219,233,232,.18);
+  --s-btn1:#15292e; --s-btn2:#0f2025; --s-btn-line:#24404a; --s-btn-ink:#d3e4e3;
+  --s-down1:#1d4a3f; --s-down2:#163a31; --s-glow:rgba(79,181,148,.10); --s-glow2:rgba(79,181,148,.26);
+  --s-ripple:rgba(79,181,148,.75); --s-flash:#7ccfb3;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Segoe UI",sans-serif}
+html,body{margin:0;background-color:var(--bg);color:var(--ink);font:300 16px/1.65 -apple-system,"system-ui","Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif}
+html{min-height:100%;background-image:var(--bg-image);background-repeat:no-repeat;background-size:100% 100%}
+body{min-height:100vh;background:transparent}
+b,strong{font-weight:600}
 [hidden]{display:none!important}
-main{max-width:860px;margin:0 auto;padding:28px 20px 72px}
-h1{font-size:26px;line-height:1.25;margin:0 0 8px;font-weight:650;letter-spacing:.5px}
-h2{font-size:18px;margin:0 0 10px;font-weight:650}
-.sub{color:var(--muted);margin:0 0 22px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin:0 0 16px}
+main{max-width:860px;margin:0 auto;padding:0 20px 48px}
+.site-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:22px 34px}
+.site-head .brand{font-size:26px;font-weight:700;color:var(--ink);text-decoration:none}
+.site-head nav{display:flex;align-items:center;gap:10px}
+.site-head nav a{font-weight:400;color:var(--ink);text-decoration:none;padding:7px 18px;border:1px solid var(--accent);border-radius:100px}
+.site-head nav a:hover{background:var(--soft)}
+.site-head nav a.cta{background:var(--accent);color:var(--on-accent);border-radius:12px;padding:8px 18px}
+.site-head nav a.cta:hover{background:var(--accent2)}
+.site-foot{padding-block:8px 48px;color:var(--muted);font-size:14px;display:flex;gap:6px 18px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.site-foot a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+.site-foot .links{display:flex;gap:6px 16px;flex-wrap:wrap}
+a:focus-visible{outline:2px solid var(--accent2);outline-offset:3px;border-radius:4px}
+h1{font-size:clamp(26px,5.4vw,36px);line-height:1.2;margin:0 0 12px;font-weight:700;text-wrap:balance}
+h2{font-size:20px;line-height:1.3;margin:0 0 12px;font-weight:700;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 26px;max-width:62ch;font-size:17px}
+.card{background:var(--card);border-radius:24px;padding:26px 28px;margin:0 0 18px}
+#whyCard{background:var(--warm)}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.chips button,.btn{font:inherit;border:1px solid var(--line);background:var(--soft);color:var(--ink);padding:8px 16px;border-radius:999px;cursor:pointer}
+.chips button,.btn{font:inherit;font-weight:400;border:1px solid var(--accent);background:transparent;color:var(--ink);padding:8px 18px;border-radius:100px;cursor:pointer;transition:background .15s}
+.chips button:hover,.btn:hover{background:var(--soft)}
 .chips .custom{display:inline-flex;align-items:center;gap:6px}
-.chips .custom input{font:inherit;width:84px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font-variant-numeric:tabular-nums}
+.chips .custom input{font:inherit;width:84px;padding:7px 12px;border:1px solid var(--accent);border-radius:100px;background:var(--soft);color:var(--ink);font-variant-numeric:tabular-nums}
 .chips .custom input:focus{outline:2px solid var(--accent);outline-offset:1px}
 .chips .custom .unit{color:var(--muted);font-size:14px}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 32px}
@@ -60,12 +79,13 @@ h2{font-size:18px;margin:0 0 10px;font-weight:650}
 .why li{margin:8px 0;line-height:1.55}
 .why b{font-weight:600}
 .chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);padding:12px 30px;font-size:17px;font-weight:600}
-.btn.ghost{background:transparent}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);padding:12px 32px;font-size:17px;font-weight:600;border-radius:12px}
+.btn.primary:hover{background:var(--accent2)}
+.btn.ghost{background:transparent;border-color:var(--line)}
 .btn.danger{color:var(--warn)}
 .btn:focus-visible,.chips button:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
 label.opt{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:15px;cursor:pointer}
-.banner{border:1px dashed var(--accent);background:var(--soft);border-radius:14px;padding:12px 16px;margin:0 0 16px}
+.banner{border:1px dashed var(--accent);background:var(--soft);border-radius:16px;padding:12px 16px;margin:0 0 16px}
 kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;background:var(--soft)}
 ul.how{margin:6px 0 0;padding-left:20px;color:var(--muted)}
 ul.how li{margin:3px 0}
@@ -103,8 +123,8 @@ ul.how li{margin:3px 0}
 
 /* ---- results ---- */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.stat{background:var(--soft);border-radius:14px;padding:12px 14px}
-.stat b{display:block;font-size:26px;font-weight:650;line-height:1.2;font-variant-numeric:tabular-nums}
+.stat{background:var(--soft);border-radius:16px;padding:14px 16px}
+.stat b{display:block;font-size:26px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums}
 .stat span{color:var(--muted);font-size:13px}
 .insights{margin:12px 0 0;padding-left:20px}
 .insights li{margin:5px 0}
@@ -114,7 +134,7 @@ svg.chart{width:100%;height:auto;display:block}
 .chart .t{fill:var(--ink);font-size:13px}
 .chart .grid{stroke:var(--grid);stroke-width:1}
 .chart .axis{stroke:var(--line);stroke-width:1.2}
-textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;resize:vertical;min-height:64px}
+textarea{width:100%;font:inherit;font-weight:300;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:10px 12px;resize:vertical;min-height:64px}
 table.hist{width:100%;border-collapse:collapse;font-size:14px}
 table.hist td,table.hist th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums}
 table.hist th{color:var(--muted);font-weight:500}
@@ -128,6 +148,13 @@ table.hist tr.link:hover{background:var(--soft)}
 
 <!-- ================= HOME ================= -->
 <section id="home">
+  <header class="site-head">
+    <a class="brand" href="https://mengchen.co">Meng Chen</a>
+    <nav aria-label="Site">
+      <a href="https://mengchen.co/blogs/">Blogs</a>
+      <a class="cta" href="https://tidycal.com/mengchen/clarity">Connect</a>
+    </nav>
+  </header>
   <h1>Thoughts Counter during meditation</h1>
   <p class="sub">Tap each time you notice a thought. When you finish, see how dense your thoughts were and how far apart they came.</p>
 
@@ -197,10 +224,14 @@ table.hist tr.link:hover{background:var(--soft)}
     </div>
   </div>
   <p class="note">Your data stays in this browser on this device and is never uploaded. Clearing browser data erases it, so export anything you want to keep.</p>
+  <footer class="site-foot">
+    <span>A free meditation tool by <a href="https://mengchen.co">Meng Chen</a>, life and career coach.</span>
+    <span class="links"><a href="https://mengchen.co">mengchen.co</a><a href="https://mengchen.co/blogs/">Blogs</a><a href="https://www.instagram.com/mengsees/">Instagram</a><a href="https://www.linkedin.com/in/meng888/">LinkedIn</a></span>
+  </footer>
 </section>
 
 <!-- ================= RESULTS ================= -->
-<section id="results" hidden>
+<section id="results" hidden style="padding-top:28px">
   <div class="row" style="justify-content:space-between;margin-bottom:6px">
     <h1 id="resTitle">This session</h1>
     <button class="btn ghost" id="backBtn">← Back</button>
