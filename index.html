@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Thoughts Counter</title>
+<title>Thought Counter</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2032%2032%22%3E%3Crect%20width=%2232%22%20height=%2232%22%20rx=%228%22%20fill=%22%23e3efed%22/%3E%3Cg%20transform=%22translate%283.2%202.6%29%20scale%281.12%29%22%20fill=%22none%22%20stroke=%22%232c7560%22%20stroke-width=%221.8%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M7%2017.5h9.6a3.6%203.6%200%200%200%20.5-7.2A5.2%205.2%200%200%200%207.2%209.4%204.1%204.1%200%200%200%207%2017.5z%22/%3E%3Ccircle%20cx=%229.7%22%20cy=%2212.8%22%20r=%22.75%22%20fill=%22%232c7560%22/%3E%3Ccircle%20cx=%2214.3%22%20cy=%2212.8%22%20r=%22.75%22%20fill=%22%232c7560%22/%3E%3Cpath%20d=%22M10.5%2014.9q1.5%201.3%203%200%22/%3E%3Ccircle%20cx=%226.3%22%20cy=%2220.7%22%20r=%221.2%22/%3E%3Ccircle%20cx=%223.7%22%20cy=%2223%22%20r=%22.7%22%20fill=%22%232c7560%22/%3E%3C/g%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
@@ -68,10 +68,10 @@ main{margin:0}
 .site-foot a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px}
 .site-foot .links{display:flex;gap:6px 18px;flex-wrap:wrap}
 .pagehead{text-align:center;padding:22px 16px 26px;max-width:760px;margin:0 auto}
-.phrow{display:grid;grid-template-columns:84px 1fr 84px;align-items:center;gap:8px}
-.phrow h1{margin:0;font-size:clamp(24px,5vw,34px)}
-.phrow .back{justify-self:start;padding:7px 14px;font-size:14px}
-.pagehead .sub{margin:8px auto 0;font-size:15px}
+.phrow{display:flex;justify-content:flex-start;margin-bottom:8px}
+.phrow .back{padding:7px 14px;font-size:14px}
+.pagehead h1{margin:4px auto 0;max-width:640px;font-size:clamp(23px,5.6vw,36px)}
+.pagehead .sub{margin:10px auto 0;font-size:15px}
 @media (max-width:640px){
   .site-head{grid-template-columns:1fr auto;grid-template-areas:"brand end" "mid mid";padding:16px}
   .site-head .brand{grid-area:brand;font-size:23px} .site-head .nav-end{grid-area:end} .site-head .nav-mid{grid-area:mid;justify-self:start}
@@ -130,7 +130,9 @@ ul.how li{margin:3px 0}
 @keyframes rip{from{transform:scale(1);opacity:.9}to{transform:scale(1.9);opacity:0}}
 #clock{margin-top:34px;font-size:34px;letter-spacing:3px;font-variant-numeric:tabular-nums;color:var(--s-ink)}
 #count{margin-top:6px;font-size:15px;color:var(--s-muted);min-height:24px}
-#hint{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;color:var(--s-hint);padding:0 16px}
+#foot{position:absolute;left:0;right:0;bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px}
+#hint{flex:1;text-align:center;font-size:13px;color:var(--s-hint)}
+#cancelBtn{font:inherit;font-size:13px;background:transparent;color:var(--s-ink);border:1px solid var(--s-line);border-radius:999px;padding:5px 14px;cursor:pointer;flex:none}
 #sbar{position:absolute;top:16px;right:16px;display:flex;gap:8px;opacity:.55;transition:opacity .4s}
 #sbar button{font:inherit;font-size:13px;background:transparent;color:var(--s-ink);border:1px solid var(--s-line);border-radius:999px;padding:4px 12px;cursor:pointer}
 #big{margin-top:30px;width:min(62vw,250px,34vh);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(18px,5vw,24px);letter-spacing:.3px;line-height:1.25;color:var(--s-btn-ink);background:radial-gradient(circle at 50% 38%,var(--s-btn1) 0,var(--s-btn2) 75%);border:1px solid var(--s-btn-line);box-shadow:0 0 60px var(--s-glow);transition:transform .08s,background .08s;-webkit-tap-highlight-color:transparent}
@@ -145,7 +147,9 @@ ul.how li{margin:3px 0}
   #sbar button{font-size:12px;padding:6px 10px}
   #clock{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:16px;margin:0;font-size:20px;letter-spacing:1px}
   #count{position:absolute;top:calc(36px + env(safe-area-inset-top,0px));left:16px;margin:0;font-size:12px;min-height:0}
-  #hint{bottom:calc(12px + env(safe-area-inset-bottom,0px));font-size:11px}
+  #foot{bottom:calc(8px + env(safe-area-inset-bottom,0px));padding:0 14px}
+  #hint{text-align:left;font-size:11px}
+  #cancelBtn{font-size:12px;padding:5px 12px}
   #flash{top:auto;bottom:calc(30px + env(safe-area-inset-bottom,0px));font-size:12px}
 }
 @keyframes breatheBig{0%,100%{box-shadow:0 0 40px var(--s-glow)}50%{box-shadow:0 0 90px var(--s-glow2)}}
@@ -204,8 +208,8 @@ table.hist tr.link:hover{background:var(--soft)}
   <div class="band">
     <div class="hero">
       <div class="hero-ico" aria-hidden="true"><i></i><i></i><i></i><svg class="ico"><use href="#i-cloud"/></svg></div>
-      <h1>Thoughts Counter during meditation</h1>
-      <p class="sub">Tap each time you observe a thought. When you finish, see when each thought came and how long the gaps between them were.</p>
+      <h1>Thought Counter</h1>
+      <p class="sub">Practice observing your thoughts instead of being carried away by them. Tap each time you catch one, during meditation or any other time, and see the calm stretches between your thoughts.</p>
       <div id="recoverBox" class="banner" hidden></div>
       <div class="durrow" id="durField">
         <select id="durSel" aria-label="Session length">
@@ -236,16 +240,16 @@ table.hist tr.link:hover{background:var(--soft)}
   <div class="wrap">
     <h2 class="sec">How it works</h2>
     <div class="steps">
-      <div class="step"><span class="ib"><svg class="ico"><use href="#i-leaf"/></svg></span><h3>Settle in</h3><p>You get 10 seconds after pressing Start. The clock begins once you are ready.</p></div>
+      <div class="step"><span class="ib"><svg class="ico"><use href="#i-leaf"/></svg></span><h3>Settle in</h3><p>You get 5 seconds after pressing Start. The clock begins once you are ready.</p></div>
       <div class="step"><span class="ib"><svg class="ico"><use href="#i-phone"/></svg></span><h3>On a phone</h3><p>Tap the big button, or anywhere on the screen, for each thought. Tap <b>Undo</b> if you slip.</p></div>
       <div class="step"><span class="ib"><svg class="ico"><use href="#i-keys"/></svg></span><h3>On a computer</h3><p>Press <kbd>Space</kbd> or left-click anywhere. <kbd>Backspace</kbd> or a right-click undoes the last one.</p></div>
-      <div class="step"><span class="ib"><svg class="ico"><use href="#i-bell"/></svg></span><h3>Finish</h3><p>It ends by itself at the set length. Or tap <b>End</b> (twice), or press <kbd>Esc</kbd> twice.</p></div>
+      <div class="step"><span class="ib"><svg class="ico"><use href="#i-bell"/></svg></span><h3>Finish</h3><p>It ends by itself at the set length. Or tap <b>End</b> (twice), or press <kbd>Esc</kbd> twice. <b>Cancel session</b> discards it.</p></div>
     </div>
 
     <h2 class="sec">What you will see</h2>
     <div class="look">
-      <h3>When your thoughts came</h3>
-      <p class="cap">Each line is one thought, so the space between two lines is the gap. Your longest quiet stretch is shaded.</p>
+      <h3>Your session at a glance</h3>
+      <p class="cap">Each line is a thought you observed. The space between two lines is the quiet between them, and your longest calm stretch is shaded.</p>
       <div id="pvTimeline"></div>
       <p class="cap" style="margin-top:4px">Example data.</p>
       <div class="more"><button class="btn ghost" id="demoBtn2">See the full example</button></div>
@@ -253,14 +257,14 @@ table.hist tr.link:hover{background:var(--soft)}
 
     <h2 class="sec">Why it helps</h2>
     <figure class="quote"><blockquote>&ldquo;We are not our thoughts, we are the existence that can observe it.&rdquo;</blockquote></figure>
-    <p class="lead">Observing is one of the most valuable skills you can train. Each time you catch a thought and tap, you practise stepping back and watching it pass, instead of being carried away by it. That steady practice is how we train our mind.</p>
+    <p class="lead">Observing is one of the most valuable skills you can train. Each time you catch a thought and tap, you practice stepping back and watching it pass, instead of being carried away by it. That steady practice is how we train our mind.</p>
     <p class="lead">Use it during meditation, or at any other time: on a walk, at your desk, while you wait in line. Choose Open-ended or set a custom length, and tap whenever you catch a thought.</p>
     <div class="card" id="whyCard">
     <div class="cols">
       <div>
         <h2>Why count your thoughts?</h2>
         <ul class="why">
-          <li><span class="ib"><svg class="ico"><use href="#i-eye"/></svg></span><div><b>Observing is the practice.</b> Each tap marks the moment you realise your attention has drifted from your anchor. That moment of recognition is the skill you are training.</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-eye"/></svg></span><div><b>Observing is the practice.</b> Each tap marks the moment you realize your attention has drifted from your anchor. That moment of recognition is the skill you are training.</div></li>
           <li><span class="ib"><svg class="ico"><use href="#i-bubbles"/></svg></span><div><b>It makes the mind visible.</b> Thoughts feel constant and shapeless. Counting turns them into separate events you can see, compare and come back to.</div></li>
           <li><span class="ib"><svg class="ico"><use href="#i-wind"/></svg></span><div><b>It keeps you out of the story.</b> A quick tap is lighter than following a thought or judging yourself for having it.</div></li>
           <li><span class="ib"><svg class="ico"><use href="#i-bars"/></svg></span><div><b>It gives you something to look at afterwards.</b> Patterns that are hard to feel in the moment show up clearly on the chart.</div></li>
@@ -270,7 +274,7 @@ table.hist tr.link:hover{background:var(--soft)}
         <h2>What you can observe</h2>
         <ul class="why">
           <li><span class="ib"><svg class="ico"><use href="#i-clock"/></svg></span><div><b>Settling time.</b> How long did it take for the first thought to come?</div></li>
-          <li><span class="ib"><svg class="ico"><use href="#i-gap"/></svg></span><div><b>Quiet stretches.</b> How long was your longest gap, and what came right before it?</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-gap"/></svg></span><div><b>Calm stretches.</b> How long was your longest calm stretch, and what came right before it?</div></li>
           <li><span class="ib"><svg class="ico"><use href="#i-burst"/></svg></span><div><b>Bursts or an even flow.</b> Thoughts often arrive in clusters. A cluster can follow a trigger such as a sound, an itch or a worry.</div></li>
           <li><span class="ib"><svg class="ico"><use href="#i-trend"/></svg></span><div><b>Across sessions.</b> Use the notes (sleep, time of day, stress, caffeine) and the Past sessions list to see what changes the pattern.</div></li>
         </ul>
@@ -298,14 +302,15 @@ table.hist tr.link:hover{background:var(--soft)}
 <section id="results" hidden>
   <div class="band">
     <div class="pagehead">
-      <div class="phrow"><button class="btn ghost back" id="backBtn">&larr; Back</button><h1 id="resTitle">This session</h1><span></span></div>
+      <div class="phrow"><button class="btn ghost back" id="backBtn">&larr; Back</button></div>
+      <h1 id="resTitle">You practiced observing your thoughts</h1>
       <p class="sub" id="resSub"></p>
     </div>
   </div>
   <div class="wrap" style="padding-top:22px">
     <div class="sum" id="statsGrid"></div>
-    <div class="card chartcard"><h2>When your thoughts came</h2><div id="chTimeline"></div><p class="note" style="margin-bottom:0">Each line is one thought, so the space between two lines is the gap. The shaded stretch is your longest quiet. Tap or hover a line to see the gap before it.</p></div>
-    <p class="note narrow" style="text-align:center">Each tap marks a moment you <em>observed</em> a thought. A higher count is not worse.</p>
+    <div class="card chartcard"><h2>Your session at a glance</h2><div id="chTimeline"></div><p class="note" style="margin-bottom:0">Each line is a thought you observed. The space between two lines is the quiet between them, and the shaded stretch is your longest calm. Tap or hover a line to see how long it had been since the one before.</p></div>
+    <p class="note narrow" style="text-align:center">Every tap is a moment of awareness. There is no good or bad number.</p>
 
     <div class="card">
       <h2>Notes</h2>
@@ -333,8 +338,8 @@ table.hist tr.link:hover{background:var(--soft)}
   <div id="orb"></div>
   <div id="clock">00:00</div>
   <div id="count"></div>
-  <div id="big" aria-hidden="true">I observed<br>a thought</div>
-  <div id="hint"></div>
+  <div id="big" aria-hidden="true">I observed</div>
+  <div id="foot"><div id="hint"></div><button id="cancelBtn" type="button">Cancel session</button></div>
 </div>
 
 <script>
@@ -433,7 +438,7 @@ function chartTimeline(marks,dur,st){
   const lq=st.longestQuiet;
   if(lq && lq.len>0 && marks.length){
     s+='<rect x="'+sx(lq.from)+'" y="'+(M.t+4)+'" width="'+(sx(lq.to)-sx(lq.from))+'" height="'+(h-M.b-M.t-8)+'" rx="6" fill="var(--accent2)" opacity=".16"/>';
-    s+='<text x="'+((sx(lq.from)+sx(lq.to))/2)+'" y="'+(M.t+22)+'" text-anchor="middle" class="t" style="fill:var(--accent2)">Longest quiet '+fmtDur(lq.len)+'</text>';
+    s+='<text x="'+((sx(lq.from)+sx(lq.to))/2)+'" y="'+(M.t+22)+'" text-anchor="middle" class="t" style="fill:var(--accent2)">Longest calm '+fmtDur(lq.len)+'</text>';
   }
   const mk=[...marks].sort((a,b)=>a-b); mk.forEach((t,i)=>{ s+='<line x1="'+sx(t)+'" y1="'+(M.t+34)+'" x2="'+sx(t)+'" y2="'+(h-M.b-6)+'" stroke="var(--tick)" stroke-width="2.4" stroke-linecap="round"><title>'+fmtTime(t)+(i? ' · gap '+fmtDur(t-mk[i-1])+' since the one before' : ' · first thought')+'</title></line>'; });
   return s+'</svg>';
@@ -473,7 +478,7 @@ function renderHome(){
   show('home'); renderPreview();
   const ss=loadSessions().sort((a,b)=>a.startedAt<b.startedAt?1:-1);
   $('histCard').hidden=!ss.length;
-  $('histTable').innerHTML='<tr><th>When</th><th>Length</th><th>Thoughts</th><th>Longest gap</th></tr>'+ss.map(s=>{ const st=computeStats(s.marks,s.duration); return '<tr class="link" data-id="'+s.id+'"><td>'+esc(new Date(s.startedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+(s.note?' <span class="tag">note</span>':'')+'</td><td>'+fmtDur(s.duration)+'</td><td>'+st.n+'</td><td>'+fmtDur(st.longestQuiet.len)+'</td></tr>'; }).join('');
+  $('histTable').innerHTML='<tr><th>When</th><th>Length</th><th>Thoughts</th><th>Longest calm</th></tr>'+ss.map(s=>{ const st=computeStats(s.marks,s.duration); return '<tr class="link" data-id="'+s.id+'"><td>'+esc(new Date(s.startedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+(s.note?' <span class="tag">note</span>':'')+'</td><td>'+fmtDur(s.duration)+'</td><td>'+st.n+'</td><td>'+fmtDur(st.longestQuiet.len)+'</td></tr>'; }).join('');
   $('histTable').querySelectorAll('tr.link').forEach(tr=>tr.addEventListener('click',()=>{ const s=loadSessions().find(x=>x.id===tr.dataset.id); if(s) renderResults(s); }));
   const a=getActive(), box=$('recoverBox');
   if(a && a.marks && a.elapsed>20){
@@ -500,12 +505,12 @@ function tick(){ if(!audio) return; const t=audio.currentTime, o=audio.createOsc
 /* --- session --- */
 function startSession(){
   ensureAudio();
-  cur={ id:'s'+Date.now(), startedAt:new Date().toISOString(), target:targetMin*60, marks:[], t0:null, prep:(window.__prep!=null? window.__prep : 10), bell:$('optBell').checked, tickSound:$('optTick').checked, showClock:$('optClock').checked, showCount:$('optCount').checked, ended:false, belled:false };
+  cur={ id:'s'+Date.now(), startedAt:new Date().toISOString(), target:targetMin*60, marks:[], t0:null, prep:(window.__prep!=null? window.__prep : 5), bell:$('optBell').checked, tickSound:$('optTick').checked, showClock:$('optClock').checked, showCount:$('optCount').checked, ended:false, belled:false };
   $('session').hidden=false; $('app').hidden=true;
   document.documentElement.requestFullscreen?.().catch(()=>{});
   try{ navigator.wakeLock?.request('screen').then(w=>wake=w).catch(()=>{}); }catch(e){}
   cur.prepEnd=performance.now()+cur.prep*1000;
-  $('hint').textContent=matchMedia('(pointer:coarse),(max-width:600px)').matches? 'Tap anywhere to count a thought  ·  Tap Undo if you slip' : 'Space / left-click = a thought  ·  Backspace / right-click = undo  ·  End (top right) or Esc twice = finish';
+  $('hint').textContent=matchMedia('(pointer:coarse),(max-width:600px)').matches? 'Tap anywhere to count a thought' : 'Space / left-click = a thought  ·  Backspace / right-click = undo  ·  End (top right) or Esc twice = finish';
   tickTimer=setInterval(loop,200); loop();
 }
 function elapsed(){ return cur.t0==null? 0 : (performance.now()-cur.t0)/1000; }
@@ -546,12 +551,19 @@ function finishSession(){
   if(dur<5){ renderHome(); return; }
   const all=loadSessions(); all.push(s); saveSessions(all); renderResults(s);
 }
+function cancelSession(){
+  if(!cur||cur.ended) return; cur.ended=true; clearInterval(tickTimer);
+  cur=null; setActive(null); wake?.release?.().catch(()=>{}); wake=null;
+  if(document.fullscreenElement) document.exitFullscreen?.().catch(()=>{});
+  $('session').hidden=true; $('app').hidden=false; renderHome();          // nothing is saved
+}
+$('cancelBtn').addEventListener('click',e=>{ e.stopPropagation(); if(!cur) return; const b=$('cancelBtn'); if(b.dataset.arm==='1'){ b.dataset.arm='0'; b.textContent='Cancel session'; cancelSession(); return; } b.dataset.arm='1'; b.textContent='Tap again to cancel'; setTimeout(()=>{ b.dataset.arm='0'; b.textContent='Cancel session'; },3000); });
 $('startBtn').addEventListener('click',startFromHome);
 let lastPtr='mouse';
-$('session').addEventListener('pointerdown',e=>{ lastPtr=e.pointerType; if(e.target.closest('#sbar')||e.button>0) return; $('session').classList.add('down'); addMark(e.timeStamp); });
+$('session').addEventListener('pointerdown',e=>{ lastPtr=e.pointerType; if(e.target.closest('#sbar,#foot button')||e.button>0) return; $('session').classList.add('down'); addMark(e.timeStamp); });
 ['pointerup','pointercancel','pointerleave'].forEach(t=>$('session').addEventListener(t,()=>$('session').classList.remove('down')));
 $('undoBtn').addEventListener('click',e=>{ e.stopPropagation(); undoMark(); });   // left click / touch / pen
-$('session').addEventListener('contextmenu',e=>{ e.preventDefault(); if(lastPtr==='mouse' && !e.target.closest('#sbar')) undoMark(); });   // long-press on touch never undoes         // right click = undo
+$('session').addEventListener('contextmenu',e=>{ e.preventDefault(); if(lastPtr==='mouse' && !e.target.closest('#sbar,#foot button')) undoMark(); });   // long-press on touch never undoes         // right click = undo
 $('endBtn').addEventListener('click',e=>{ e.stopPropagation(); if(!cur) return; const b=$('endBtn'); if(b.dataset.arm==='1'){ b.dataset.arm='0'; b.textContent='End'; finishSession(); return; } b.dataset.arm='1'; b.textContent='Tap again to end'; setTimeout(()=>{ b.dataset.arm='0'; b.textContent='End'; },3000); });
 $('session').addEventListener('mousemove',()=>{ const b=$('sbar'); b.style.opacity=.9; clearTimeout(b.t); b.t=setTimeout(()=>b.style.opacity='',2500); });
 $('tgClock').addEventListener('click',e=>{ e.stopPropagation(); if(cur) cur.showClock=!cur.showClock; });
@@ -568,10 +580,10 @@ window.addEventListener('beforeunload',e=>{ if(cur && !cur.ended && cur.marks.le
 function renderResults(s){
   viewing=s; show('results');
   const st=computeStats(s.marks,s.duration);
-  $('resTitle').textContent=s.demo? 'Example result' : 'This session';
-  $('resSub').textContent=(s.demo? 'This is simulated data, only to show what the charts look like.  ' : '')+new Date(s.startedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'})+' · '+fmtDur(s.duration)+' in total';
+  $('resTitle').textContent='You practiced observing your thoughts for '+fmtDur(s.duration);
+  $('resSub').textContent=(s.demo? 'Example data, only to show what a session looks like.  ' : '')+new Date(s.startedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
   const card=(v,l,ic)=>'<div class="stat"><b>'+v+'</b><span class="lab"><svg class="ico"><use href="#'+ic+'"/></svg>'+l+'</span></div>';
-  $('statsGrid').innerHTML=card(st.n,'Thoughts','i-cloud')+card(fmtDur(st.longestQuiet.len),'Longest gap','i-gap')+card(st.minGap!=null?fmtDur(st.minGap):'—','Shortest gap','i-burst')+card(st.firstLatency!=null?fmtDur(st.firstLatency):'—','First thought at','i-clock');
+  $('statsGrid').innerHTML=card(st.n,'Thoughts observed','i-cloud')+card(fmtDur(st.longestQuiet.len),'Longest calm stretch','i-gap')+card(st.minGap!=null?fmtDur(st.minGap):'—','Shortest gap','i-burst')+card(st.firstLatency!=null?fmtDur(st.firstLatency):'—','First thought after','i-clock');
   $('chTimeline').innerHTML=chartTimeline(s.marks,s.duration,st);
   $('noteBox').value=s.note||''; $('noteBox').disabled=!!s.demo;
   $('delBtn').hidden=!!s.demo; $('exportCsv').hidden=false; $('exportJson').hidden=false;
