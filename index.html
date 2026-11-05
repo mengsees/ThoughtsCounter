@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>念头记录器</title>
+<style>
+:root{
+  --bg:#f6f2ea; --card:#fffdf8; --ink:#3b3029; --muted:#8a7d70; --line:#e4dccf;
+  --accent:#c9824a; --accent2:#6f9a82; --soft:#efe7d8; --warn:#b5533c;
+  --grid:#e9e2d4; --bar:#d9b48f; --barhi:#c9824a; --line1:#6f9a82; --tick:#c9824a;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1d1a17; --card:#26221e; --ink:#eee6da; --muted:#a09384; --line:#3a342d;
+    --accent:#e0a06a; --accent2:#8fc1a5; --soft:#2f2a24; --warn:#e48a72;
+    --grid:#35302a; --bar:#7a5c43; --barhi:#e0a06a; --line1:#8fc1a5; --tick:#e0a06a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1d1a17; --card:#26221e; --ink:#eee6da; --muted:#a09384; --line:#3a342d;
+  --accent:#e0a06a; --accent2:#8fc1a5; --soft:#2f2a24; --warn:#e48a72;
+  --grid:#35302a; --bar:#7a5c43; --barhi:#e0a06a; --line1:#8fc1a5; --tick:#e0a06a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Segoe UI",sans-serif}
+[hidden]{display:none!important}
+main{max-width:860px;margin:0 auto;padding:28px 20px 72px}
+h1{font-size:26px;margin:0 0 4px;font-weight:650;letter-spacing:.5px}
+h2{font-size:18px;margin:0 0 10px;font-weight:650}
+.sub{color:var(--muted);margin:0 0 22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin:0 0 16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.chips button,.btn{font:inherit;border:1px solid var(--line);background:var(--soft);color:var(--ink);padding:8px 16px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;padding:12px 30px;font-size:17px;font-weight:600}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--warn)}
+.btn:focus-visible,.chips button:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+label.opt{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:15px;cursor:pointer}
+.banner{border:1px dashed var(--accent);background:var(--soft);border-radius:14px;padding:12px 16px;margin:0 0 16px}
+kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;background:var(--soft)}
+ul.how{margin:6px 0 0;padding-left:20px;color:var(--muted)}
+ul.how li{margin:3px 0}
+
+/* ---- live session ---- */
+#session{position:fixed;inset:0;background:#15120f;color:#e9dfd0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;user-select:none;-webkit-user-select:none;cursor:pointer;touch-action:manipulation}
+#orb{width:min(46vmin,360px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 42%,#3a2e24 0,#241c15 70%);box-shadow:0 0 90px rgba(201,130,74,.12);position:relative;animation:breathe 9s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.94)}50%{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){#orb{animation:none}}
+.ripple{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(224,160,106,.75);animation:rip 1.5s ease-out forwards;pointer-events:none}
+@keyframes rip{from{transform:scale(1);opacity:.9}to{transform:scale(1.9);opacity:0}}
+#clock{margin-top:34px;font-size:34px;letter-spacing:3px;font-variant-numeric:tabular-nums;color:#b9ab98}
+#count{margin-top:6px;font-size:15px;color:#8d806f;min-height:24px}
+#hint{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;color:#6f6458;padding:0 16px}
+#sbar{position:absolute;top:16px;right:16px;display:flex;gap:8px;opacity:.55;transition:opacity .4s}
+#sbar button{font:inherit;font-size:13px;background:transparent;color:#b9ab98;border:1px solid #4a4036;border-radius:999px;padding:4px 12px;cursor:pointer}
+#big{margin-top:30px;width:min(62vw,250px,34vh);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(18px,5vw,24px);letter-spacing:2px;color:#f1e4d2;background:radial-gradient(circle at 50% 38%,#6a4d37 0,#4a3526 75%);border:1px solid #7b5a40;box-shadow:0 0 60px rgba(201,130,74,.18);transition:transform .08s,background .08s;-webkit-tap-highlight-color:transparent}
+#session.down #big{transform:scale(.94);background:radial-gradient(circle at 50% 38%,#8a6143 0,#5d422e 75%)}
+#session{-webkit-touch-callout:none;padding-bottom:env(safe-area-inset-bottom,0px)}
+/* phone: the button is the screen; everything else shrinks to a thin strip */
+@media (pointer:coarse),(max-width:600px){
+  #orb{display:none}
+  #big{position:absolute;margin:0;left:14px;right:14px;top:calc(56px + env(safe-area-inset-top,0px));bottom:calc(44px + env(safe-area-inset-bottom,0px));width:auto;aspect-ratio:auto;border-radius:44px;font-size:clamp(28px,9vw,44px);letter-spacing:6px;animation:breatheBig 9s ease-in-out infinite;overflow:hidden}
+  #big .ripple{border-radius:inherit;border-width:3px}
+  #sbar{top:calc(10px + env(safe-area-inset-top,0px));right:14px;gap:6px;opacity:.7}
+  #sbar button{font-size:12px;padding:6px 10px}
+  #clock{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:16px;margin:0;font-size:20px;letter-spacing:1px}
+  #count{position:absolute;top:calc(36px + env(safe-area-inset-top,0px));left:16px;margin:0;font-size:12px;min-height:0}
+  #hint{bottom:calc(12px + env(safe-area-inset-bottom,0px));font-size:11px}
+  #flash{top:auto;bottom:calc(30px + env(safe-area-inset-bottom,0px));font-size:12px}
+}
+@keyframes breatheBig{0%,100%{box-shadow:0 0 40px rgba(201,130,74,.12)}50%{box-shadow:0 0 90px rgba(201,130,74,.28)}}
+@media (prefers-reduced-motion:reduce){#big{animation:none!important}}
+#flash{position:absolute;top:72px;left:0;right:0;text-align:center;font-size:14px;color:#e0a06a;opacity:0;transition:opacity .25s}
+
+/* ---- results ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--soft);border-radius:14px;padding:12px 14px}
+.stat b{display:block;font-size:26px;font-weight:650;line-height:1.2;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.insights{margin:12px 0 0;padding-left:20px}
+.insights li{margin:5px 0}
+.note{color:var(--muted);font-size:14px;margin-top:10px}
+svg.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font:12px -apple-system,"PingFang SC",sans-serif}
+.chart .t{fill:var(--ink);font-size:13px}
+.chart .grid{stroke:var(--grid);stroke-width:1}
+.chart .axis{stroke:var(--line);stroke-width:1.2}
+textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;resize:vertical;min-height:64px}
+table.hist{width:100%;border-collapse:collapse;font-size:14px}
+table.hist td,table.hist th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums}
+table.hist th{color:var(--muted);font-weight:500}
+table.hist tr.link{cursor:pointer}
+table.hist tr.link:hover{background:var(--soft)}
+.tag{display:inline-block;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:0 8px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main id="app">
+
+<!-- ================= HOME ================= -->
+<section id="home">
+  <h1>念头记录器</h1>
+  <p class="sub">冥想时，每觉察到一个念头，就按一下空格键或点一下鼠标。结束后看看念头的疏密和间隔。</p>
+
+  <div id="recoverBox" class="banner" hidden></div>
+
+  <div class="card">
+    <h2>开始一次冥想</h2>
+    <div class="row chips" id="durChips" role="group" aria-label="时长">
+      <button data-min="5">5 分钟</button>
+      <button data-min="10">10 分钟</button>
+      <button data-min="15" aria-pressed="true">15 分钟</button>
+      <button data-min="20">20 分钟</button>
+      <button data-min="30">30 分钟</button>
+      <button data-min="0">不限时</button>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <label class="opt"><input type="checkbox" id="optBell" checked> 时间到时响一声钟（需要先设时长）</label>
+      <label class="opt"><input type="checkbox" id="optTick"> 按键时轻响一下</label>
+      <label class="opt"><input type="checkbox" id="optClock" checked> 显示计时</label>
+      <label class="opt"><input type="checkbox" id="optCount"> 显示念头计数</label>
+    </div>
+    <div class="row" style="margin-top:18px">
+      <button class="btn primary" id="startBtn">开始</button>
+      <button class="btn ghost" id="demoBtn">看看示例图表</button>
+    </div>
+    <ul class="how">
+      <li>点“开始”后有 10 秒准备时间，时间从你坐好后才开始记。</li>
+      <li>手机上：点中间的大按钮（或屏幕任意位置）记念头，右上角“撤销”“结束”。</li>
+      <li>电脑上，记下一个念头：<kbd>空格</kbd>，或者<b>鼠标左键点屏幕任意位置</b>（手机直接点屏幕）。按错了：<kbd>退格</kbd>，或者<b>鼠标右键</b>，撤销上一个。</li>
+      <li>结束：设了时长的话，时间到会自动结束；也可以点右上角“结束”（点两次确认），或连按两次 <kbd>Esc</kbd>。</li>
+    </ul>
+  </div>
+
+  <div class="card" id="histCard" hidden>
+    <h2>以往的记录</h2>
+    <div id="histTrend"></div>
+    <table class="hist" id="histTable"></table>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost" id="exportAll">导出全部（JSON）</button>
+    </div>
+  </div>
+  <p class="note">数据只保存在这台电脑的这个浏览器里，不会上传。换浏览器或清除浏览数据会丢失，想长期保存请用“导出”。</p>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section id="results" hidden>
+  <div class="row" style="justify-content:space-between;margin-bottom:6px">
+    <h1 id="resTitle">本次结果</h1>
+    <button class="btn ghost" id="backBtn">← 返回</button>
+  </div>
+  <p class="sub" id="resSub"></p>
+
+  <div class="card">
+    <div class="stats" id="statsGrid"></div>
+    <ul class="insights" id="insights"></ul>
+    <p class="note">按键记录的是“觉察到念头”的时刻，不是念头本身的多少。觉察变得更敏锐时，数字反而可能上升——它不是分数，也没有好坏。</p>
+  </div>
+
+  <div class="card"><h2>时间线</h2><div id="chTimeline"></div></div>
+  <div class="card"><h2>疏密：每分钟的念头数</h2><div id="chDensity"></div></div>
+  <div class="card"><h2>间隔：相邻两个念头之间隔了多久</h2><div id="chIntervals"></div></div>
+
+  <div class="card">
+    <h2>备注</h2>
+    <textarea id="noteBox" placeholder="这次的状态、睡眠、环境……（可选）"></textarea>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="exportCsv">导出 CSV</button>
+      <button class="btn" id="exportJson">导出 JSON</button>
+      <button class="btn danger" id="delBtn">删除这次记录</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================= LIVE SESSION ================= -->
+<div id="session" hidden aria-live="off">
+  <div id="flash"></div>
+  <div id="sbar">
+    <button id="tgClock" type="button">计时</button>
+    <button id="tgCount" type="button">计数</button>
+    <button id="undoBtn" type="button">撤销</button>
+    <button id="endBtn" type="button">结束</button>
+  </div>
+  <div id="orb"></div>
+  <div id="clock">00:00</div>
+  <div id="count"></div>
+  <div id="big" aria-hidden="true">觉察到念头</div>
+  <div id="hint"></div>
+</div>
+
+<script>
+/* ================= CORE (pure functions; also exercised by ?selftest) ================= */
+// ==CORE START==
+function median(a){ if(!a.length) return null; const s=[...a].sort((x,y)=>x-y), m=s.length>>1; return s.length%2?s[m]:(s[m-1]+s[m])/2; }
+function mean(a){ return a.length? a.reduce((x,y)=>x+y,0)/a.length : null; }
+function stdev(a){ if(a.length<2) return null; const m=mean(a); return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/a.length); }
+function fmtTime(sec){ sec=Math.max(0,Math.round(sec)); const h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s=sec%60; const p=n=>String(n).padStart(2,'0'); return h? h+':'+p(m)+':'+p(s) : p(m)+':'+p(s); }
+function fmtDur(sec){ if(sec==null) return '—'; if(sec<10) return sec.toFixed(1)+' 秒'; if(sec<60) return Math.round(sec)+' 秒'; const m=Math.floor(sec/60), s=Math.round(sec%60); return s? m+' 分 '+s+' 秒' : m+' 分'; }
+function computeStats(marks,dur){
+  marks=[...marks].sort((a,b)=>a-b);
+  const n=marks.length, gaps=[];
+  for(let i=1;i<n;i++) gaps.push(marks[i]-marks[i-1]);
+  const bounds=[0,...marks,dur], quiet=[];
+  for(let i=1;i<bounds.length;i++) quiet.push({from:bounds[i-1],to:bounds[i],len:bounds[i]-bounds[i-1]});
+  const longest=quiet.reduce((b,q)=>q.len>b.len?q:b,quiet[0]);
+  const half=dur/2, firstHalf=marks.filter(t=>t<half).length, secondHalf=n-firstHalf;
+  const sd=stdev(gaps), mg=mean(gaps);
+  return {
+    n, duration:dur, ratePerMin: dur>0? n/(dur/60) : 0,
+    gaps, meanGap:mg, medianGap:median(gaps), minGap:gaps.length?Math.min(...gaps):null, maxGap:gaps.length?Math.max(...gaps):null,
+    cv:(gaps.length>=3 && mg>0)? sd/mg : null,
+    firstLatency:n? marks[0] : null, tail:n? dur-marks[n-1] : dur,
+    longestQuiet:longest, firstHalf, secondHalf
+  };
+}
+function binRates(marks,dur,binSec){
+  const nb=Math.max(1,Math.ceil(dur/binSec)), out=[];
+  for(let b=0;b<nb;b++){
+    const from=b*binSec, to=Math.min(dur,from+binSec), w=to-from;
+    const c=marks.filter(t=>t>=from && (b===nb-1? t<=to : t<to)).length;
+    out.push({from,to,count:c,rate:w>0? c/(w/60):0});
+  }
+  return out;
+}
+function rolling(marks,dur,win,step){
+  const out=[];
+  for(let t=0;t<=dur+1e-9;t+=step){
+    const a=Math.max(0,t-win/2), b=Math.min(dur,t+win/2), w=b-a;
+    const c=marks.filter(x=>x>=a && x<=b).length;
+    out.push({t:Math.min(t,dur),rate:w>0? c/(w/60):0});
+  }
+  return out;
+}
+function niceStep(range,target){
+  const c=[5,10,15,30,60,120,180,300,600,900,1200,1800,3600], raw=range/target;
+  for(const s of c) if(s>=raw) return s; return 3600;
+}
+function describe(st){
+  const L=[];
+  if(st.n===0){ L.push('这次没有记录到念头。'); return L; }
+  L.push('共记录 <b>'+st.n+'</b> 个念头，平均每分钟 <b>'+st.ratePerMin.toFixed(1)+'</b> 个'+(st.ratePerMin>0?'（约每 '+fmtDur(60/st.ratePerMin)+' 一个）':'')+'。');
+  if(st.gaps.length) L.push('相邻念头的典型间隔（中位数）<b>'+fmtDur(st.medianGap)+'</b>，最短 '+fmtDur(st.minGap)+'，最长 '+fmtDur(st.maxGap)+'。');
+  const lq=st.longestQuiet;
+  L.push('最长的一段安静：<b>'+fmtDur(lq.len)+'</b>（'+fmtTime(lq.from)+' – '+fmtTime(lq.to)+'）。');
+  if(st.firstLatency!=null) L.push('坐下后 '+fmtDur(st.firstLatency)+' 出现第一个念头。');
+  if(st.duration>=120){
+    const a=st.firstHalf, b=st.secondHalf, d=b-a, rel=Math.abs(d)/Math.max(a,b,1);
+    let txt; if(Math.abs(d)>=2 && rel>=0.25) txt = d<0? '后半段比前半段少（'+a+' → '+b+'）' : '后半段比前半段多（'+a+' → '+b+'）'; else txt='前后半段差不多（'+a+' / '+b+'）';
+    L.push(txt+'。');
+  }
+  if(st.cv!=null){
+    if(st.cv>1.2) L.push('节奏：念头倾向于<b>成串出现</b>，串与串之间有较长的安静。');
+    else if(st.cv<0.7) L.push('节奏：间隔比较<b>均匀</b>。');
+    else L.push('节奏：介于成串与均匀之间。');
+  }
+  return L;
+}
+function makeDemo(){
+  let s=20260504; const r=()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; };
+  const dur=15*60, marks=[]; let t=34;
+  while(t<dur-8){
+    const prog=t/dur, rate=3.2*(1-0.55*prog)/60;          // gradually fewer thoughts
+    t+=Math.max(1.5,-Math.log(1-r())/rate*(r()<0.28?0.22:1.15));   // some bursts, some long stretches (humans cannot notice 2 thoughts within 1.5 s)
+    if(t<dur-5) marks.push(+t.toFixed(2));
+  }
+  return {id:'demo',startedAt:new Date().toISOString(),duration:dur,target:dur,marks,note:'',demo:true};
+}
+// ==CORE END==
+
+/* ================= SVG charts ================= */
+const NS='http://www.w3.org/2000/svg';
+const W=760, M={l:46,r:16,t:14,b:34};
+function svgOpen(h){ return '<svg class="chart" viewBox="0 0 '+W+' '+h+'" role="img" xmlns="'+NS+'">'; }
+function xAxis(dur,h,inner){
+  const step=niceStep(dur,7); let g='';
+  for(let t=0;t<=dur+1e-6;t+=step){
+    const x=M.l+(W-M.l-M.r)*t/dur;
+    g+='<line class="grid" x1="'+x+'" y1="'+M.t+'" x2="'+x+'" y2="'+(h-M.b)+'"/><text x="'+x+'" y="'+(h-M.b+18)+'" text-anchor="middle">'+fmtTime(t)+'</text>';
+  }
+  return g+'<line class="axis" x1="'+M.l+'" y1="'+(h-M.b)+'" x2="'+(W-M.r)+'" y2="'+(h-M.b)+'"/>';
+}
+function chartTimeline(marks,dur,st){
+  const h=130, sx=t=>M.l+(W-M.l-M.r)*t/dur; let s=svgOpen(h)+xAxis(dur,h);
+  const lq=st.longestQuiet;
+  if(lq && lq.len>0 && marks.length){
+    s+='<rect x="'+sx(lq.from)+'" y="'+(M.t+4)+'" width="'+(sx(lq.to)-sx(lq.from))+'" height="'+(h-M.b-M.t-8)+'" rx="6" fill="var(--accent2)" opacity=".16"/>';
+    s+='<text x="'+((sx(lq.from)+sx(lq.to))/2)+'" y="'+(M.t+22)+'" text-anchor="middle" class="t" style="fill:var(--accent2)">最长安静 '+fmtDur(lq.len)+'</text>';
+  }
+  marks.forEach(t=>{ s+='<line x1="'+sx(t)+'" y1="'+(M.t+34)+'" x2="'+sx(t)+'" y2="'+(h-M.b-6)+'" stroke="var(--tick)" stroke-width="2.4" stroke-linecap="round"><title>'+fmtTime(t)+'</title></line>'; });
+  return s+'</svg>';
+}
+function chartDensity(marks,dur){
+  const h=240, binSec = dur<=360? 30 : 60, bins=binRates(marks,dur,binSec), sm=rolling(marks,dur,Math.min(180,Math.max(60,dur/4)),Math.max(5,dur/120));
+  const maxR=Math.max(1,...bins.map(b=>b.rate),...sm.map(p=>p.rate)), top=Math.ceil(maxR*1.15), yy=v=>h-M.b-(h-M.b-M.t)*v/top, sx=t=>M.l+(W-M.l-M.r)*t/dur;
+  let s=svgOpen(h)+xAxis(dur,h);
+  const ys=top<=6? 1 : top<=12? 2 : Math.ceil(top/6);
+  for(let v=0;v<=top;v+=ys) s+='<line class="grid" x1="'+M.l+'" y1="'+yy(v)+'" x2="'+(W-M.r)+'" y2="'+yy(v)+'"/><text x="'+(M.l-8)+'" y="'+(yy(v)+4)+'" text-anchor="end">'+v+'</text>';
+  bins.forEach(b=>{ const x0=sx(b.from)+2, x1=sx(b.to)-2, y=yy(b.rate); s+='<rect x="'+x0+'" y="'+y+'" width="'+Math.max(1,x1-x0)+'" height="'+(h-M.b-y)+'" rx="4" fill="var(--bar)"><title>'+fmtTime(b.from)+'–'+fmtTime(b.to)+'：'+b.count+' 个（每分钟 '+b.rate.toFixed(1)+'）</title></rect>'; });
+  s+='<polyline fill="none" stroke="var(--line1)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="'+sm.map(p=>sx(p.t).toFixed(1)+','+yy(p.rate).toFixed(1)).join(' ')+'"/>';
+  s+='<text x="'+(M.l)+'" y="'+(M.t+2)+'" class="t">个 / 分钟</text><text x="'+(W-M.r)+'" y="'+(M.t+2)+'" text-anchor="end" style="fill:var(--line1)">— 平滑趋势</text>';
+  return s+'</svg>';
+}
+function chartIntervals(marks,dur,st){
+  if(marks.length<2) return '<p class="note">至少需要 2 个念头才能画出间隔。</p>';
+  const h=250, g=st.gaps, lo=1, maxG=Math.max(...g,10), all=[1,2,5,10,15,30,60,120,300,600,900,1800,3600,7200];
+  const hi=all.find(v=>v>=maxG*1.05)||all[all.length-1], ticks=all.filter(v=>v<=hi);
+  const L=v=>Math.log(Math.max(v,lo)), yy=v=>h-M.b-(h-M.b-M.t)*(L(v)-L(lo))/(L(hi)-L(lo)), sx=t=>M.l+(W-M.l-M.r)*t/dur;
+  let s=svgOpen(h)+xAxis(dur,h);
+  ticks.forEach(v=>{ if(v>hi) return; s+='<line class="grid" x1="'+M.l+'" y1="'+yy(v)+'" x2="'+(W-M.r)+'" y2="'+yy(v)+'"/><text x="'+(M.l-8)+'" y="'+(yy(v)+4)+'" text-anchor="end">'+(v>=60? (v/60)+'分' : v+'秒')+'</text>'; });
+  const med=st.medianGap; s+='<line x1="'+M.l+'" y1="'+yy(med)+'" x2="'+(W-M.r)+'" y2="'+yy(med)+'" stroke="var(--accent2)" stroke-width="1.6" stroke-dasharray="6 5"/><text x="'+(M.l+6)+'" y="'+(yy(med)-6)+'" style="fill:var(--accent2)">中位数 '+fmtDur(med)+'</text>';
+  const mk=[...marks].sort((a,b)=>a-b);
+  s+='<polyline fill="none" stroke="var(--bar)" stroke-width="1.4" stroke-linejoin="round" points="'+g.map((v,i)=>sx(mk[i+1]).toFixed(1)+','+yy(v).toFixed(1)).join(' ')+'"/>';
+  g.forEach((v,i)=>{ const x=sx(mk[i+1]), y=yy(v), mx=(v===Math.max(...g)); s+='<circle cx="'+x+'" cy="'+y+'" r="'+(mx?6:4)+'" fill="'+(mx?'var(--barhi)':'var(--tick)')+'"><title>'+fmtTime(mk[i])+' → '+fmtTime(mk[i+1])+'：间隔 '+fmtDur(v)+'</title></circle>'; });
+  return s+'</svg><p class="note">每个点 = 一次间隔（横轴是后一个念头出现的时间）。纵轴是对数刻度：这样短间隔和偶尔出现的长间隔都能看清。点越高，说明这两个念头之间越安静。</p>';
+}
+function chartHistory(sessions){
+  const ss=[...sessions].sort((a,b)=>a.startedAt<b.startedAt?-1:1).slice(-14); if(ss.length<2) return '';
+  const h=170, rates=ss.map(x=>x.marks.length/(x.duration/60)), top=Math.max(1,Math.ceil(Math.max(...rates)*1.15)), bw=(W-M.l-M.r)/ss.length, yy=v=>h-M.b-(h-M.b-M.t)*v/top;
+  let s=svgOpen(h)+'<line class="axis" x1="'+M.l+'" y1="'+(h-M.b)+'" x2="'+(W-M.r)+'" y2="'+(h-M.b)+'"/>';
+  for(let v=0;v<=top;v+=Math.max(1,Math.ceil(top/4))) s+='<line class="grid" x1="'+M.l+'" y1="'+yy(v)+'" x2="'+(W-M.r)+'" y2="'+yy(v)+'"/><text x="'+(M.l-8)+'" y="'+(yy(v)+4)+'" text-anchor="end">'+v+'</text>';
+  ss.forEach((x,i)=>{ const cx=M.l+bw*(i+.5), d=new Date(x.startedAt); s+='<rect x="'+(cx-bw*.3)+'" y="'+yy(rates[i])+'" width="'+(bw*.6)+'" height="'+(h-M.b-yy(rates[i]))+'" rx="4" fill="var(--bar)"><title>'+d.toLocaleString('zh-CN',{hour12:false})+'：每分钟 '+rates[i].toFixed(1)+' 个</title></rect><text x="'+cx+'" y="'+(h-M.b+16)+'" text-anchor="middle">'+(d.getMonth()+1)+'/'+d.getDate()+'</text>'; });
+  return s+'<text x="'+M.l+'" y="'+(M.t+2)+'" class="t">每次的平均念头数（个 / 分钟）</text></svg>';
+}
+
+/* ================= storage ================= */
+const KS='tt.sessions.v1', KA='tt.active.v1';
+function loadSessions(){ try{ return JSON.parse(localStorage.getItem(KS)||'[]'); }catch(e){ return []; } }
+function saveSessions(a){ try{ localStorage.setItem(KS,JSON.stringify(a)); }catch(e){} }
+function setActive(o){ try{ if(o) localStorage.setItem(KA,JSON.stringify(o)); else localStorage.removeItem(KA); }catch(e){} }
+function getActive(){ try{ return JSON.parse(localStorage.getItem(KA)||'null'); }catch(e){ return null; } }
+
+/* ================= app ================= */
+const $=id=>document.getElementById(id);
+let targetMin=15, cur=null, tickTimer=null, escArm=0, viewing=null, audio=null, wake=null;
+
+document.querySelectorAll('#durChips button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#durChips button').forEach(x=>x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true'); targetMin=+b.dataset.min;
+}));
+
+function show(which){ ['home','results'].forEach(id=>$(id).hidden=(id!==which)); window.scrollTo(0,0); }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function renderHome(){
+  show('home');
+  const ss=loadSessions().sort((a,b)=>a.startedAt<b.startedAt?1:-1);
+  $('histCard').hidden=!ss.length;
+  $('histTrend').innerHTML=chartHistory(ss);
+  $('histTable').innerHTML='<tr><th>时间</th><th>时长</th><th>念头</th><th>每分钟</th><th>中位间隔</th></tr>'+ss.map(s=>{ const st=computeStats(s.marks,s.duration); return '<tr class="link" data-id="'+s.id+'"><td>'+esc(new Date(s.startedAt).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}))+(s.note?' <span class="tag">有备注</span>':'')+'</td><td>'+fmtDur(s.duration)+'</td><td>'+st.n+'</td><td>'+st.ratePerMin.toFixed(1)+'</td><td>'+(st.medianGap!=null?fmtDur(st.medianGap):'—')+'</td></tr>'; }).join('');
+  $('histTable').querySelectorAll('tr.link').forEach(tr=>tr.addEventListener('click',()=>{ const s=loadSessions().find(x=>x.id===tr.dataset.id); if(s) renderResults(s); }));
+  const a=getActive(), box=$('recoverBox');
+  if(a && a.marks && a.elapsed>20){
+    box.hidden=false; box.innerHTML='上次有一次没有正常结束的记录：<b>'+a.marks.length+'</b> 个念头，约 '+fmtDur(a.elapsed)+'。 <button class="btn" id="recView">查看并保存</button> <button class="btn ghost" id="recDrop">丢弃</button>';
+    $('recView').onclick=()=>{ const s={id:'s'+Date.now(),startedAt:a.startedAt,duration:Math.max(a.elapsed,(a.marks.length?Math.max(...a.marks):0)+1),target:a.target,marks:a.marks,note:''}; const all=loadSessions(); all.push(s); saveSessions(all); setActive(null); renderResults(s); };
+    $('recDrop').onclick=()=>{ setActive(null); renderHome(); };
+  } else box.hidden=true;
+}
+
+/* --- audio (created on a user click so browsers allow it) --- */
+function ensureAudio(){ try{ if(!audio){ audio=new (window.AudioContext||window.webkitAudioContext)(); } if(audio.state==='suspended') audio.resume(); }catch(e){ audio=null; } }
+function bell(){ if(!audio) return; const t=audio.currentTime; [[528,.22],[792,.08],[1320,.03]].forEach(([f,a])=>{ const o=audio.createOscillator(), g=audio.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(a,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+5.5); o.connect(g).connect(audio.destination); o.start(t); o.stop(t+5.6); }); }
+function tick(){ if(!audio) return; const t=audio.currentTime, o=audio.createOscillator(), g=audio.createGain(); o.type='sine'; o.frequency.value=660; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.05,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+.25); o.connect(g).connect(audio.destination); o.start(t); o.stop(t+.3); }
+
+/* --- session --- */
+function startSession(){
+  ensureAudio();
+  cur={ id:'s'+Date.now(), startedAt:new Date().toISOString(), target:targetMin*60, marks:[], t0:null, prep:(window.__prep!=null? window.__prep : 10), bell:$('optBell').checked, tickSound:$('optTick').checked, showClock:$('optClock').checked, showCount:$('optCount').checked, ended:false, belled:false };
+  $('session').hidden=false; $('app').hidden=true;
+  document.documentElement.requestFullscreen?.().catch(()=>{});
+  try{ navigator.wakeLock?.request('screen').then(w=>wake=w).catch(()=>{}); }catch(e){}
+  cur.prepEnd=performance.now()+cur.prep*1000;
+  $('hint').textContent=matchMedia('(pointer:coarse),(max-width:600px)').matches? '点屏幕任意位置记下念头　·　按错了点“撤销”' : '空格 / 左键点击 = 记下一个念头　·　退格 / 右键 = 撤销　·　右上角“结束”或连按两次 Esc = 结束';
+  tickTimer=setInterval(loop,200); loop();
+}
+function elapsed(){ return cur.t0==null? 0 : (performance.now()-cur.t0)/1000; }
+function loop(){
+  if(!cur) return;
+  const now=performance.now();
+  if(cur.t0==null){
+    const left=Math.ceil((cur.prepEnd-now)/1000);
+    if(left>0){ $('clock').textContent='准备 '+left; $('count').textContent='先坐好，闭上眼睛也可以'; return; }
+    cur.t0=now; $('count').textContent='';
+  }
+  const e=elapsed();
+  $('clock').style.visibility=cur.showClock?'visible':'hidden';
+  $('clock').textContent=cur.target? fmtTime(Math.max(0,cur.target-e)) : fmtTime(e);
+  $('count').textContent=cur.showCount? ('念头 '+cur.marks.length) : '';
+  if(Math.floor(e)%5===0) setActive({startedAt:cur.startedAt,target:cur.target,marks:cur.marks,elapsed:e});
+  if(cur.target && e>=cur.target && !cur.belled){ cur.belled=true; if(cur.bell) bell(); setTimeout(()=>finishSession(),cur.bell?3500:300); }
+}
+function flash(msg){ const f=$('flash'); f.textContent=msg; f.style.opacity=1; clearTimeout(flash.t); flash.t=setTimeout(()=>f.style.opacity=0,1600); }
+function addMark(ts){
+  if(!cur||cur.ended) return;
+  if(cur.t0==null){ flash('还在准备时间，坐好后再开始记'); return; }
+  const t=Math.max(0,(ts-cur.t0)/1000);
+  if(cur.marks.length && t-cur.marks[cur.marks.length-1]<0.12) return;       // ignore accidental double-hit
+  cur.marks.push(+t.toFixed(3));
+  setActive({startedAt:cur.startedAt,target:cur.target,marks:cur.marks,elapsed:t});
+  const r=document.createElement('div'); r.className='ripple'; ($('orb').offsetParent===null? $('big') : $('orb')).appendChild(r); setTimeout(()=>r.remove(),1600);
+  if(cur.tickSound) tick();
+}
+function undoMark(){ if(!cur||!cur.marks.length) return; cur.marks.pop(); flash('已撤销上一个'); }
+function finishSession(){
+  if(!cur||cur.ended) return; cur.ended=true; clearInterval(tickTimer);
+  const dur=cur.t0==null? 0 : Math.max(1,(performance.now()-cur.t0)/1000);
+  const s={id:cur.id,startedAt:cur.startedAt,duration:+dur.toFixed(2),target:cur.target,marks:cur.marks,note:''};
+  cur=null; setActive(null); wake?.release?.().catch(()=>{}); wake=null;
+  if(document.fullscreenElement) document.exitFullscreen?.().catch(()=>{});
+  $('session').hidden=true; $('app').hidden=false;
+  if(dur<5){ renderHome(); return; }
+  const all=loadSessions(); all.push(s); saveSessions(all); renderResults(s);
+}
+$('startBtn').addEventListener('click',startSession);
+let lastPtr='mouse';
+$('session').addEventListener('pointerdown',e=>{ lastPtr=e.pointerType; if(e.target.closest('#sbar')||e.button>0) return; $('session').classList.add('down'); addMark(e.timeStamp); });
+['pointerup','pointercancel','pointerleave'].forEach(t=>$('session').addEventListener(t,()=>$('session').classList.remove('down')));
+$('undoBtn').addEventListener('click',e=>{ e.stopPropagation(); undoMark(); });   // left click / touch / pen
+$('session').addEventListener('contextmenu',e=>{ e.preventDefault(); if(lastPtr==='mouse' && !e.target.closest('#sbar')) undoMark(); });   // long-press on touch never undoes         // right click = undo
+$('endBtn').addEventListener('click',e=>{ e.stopPropagation(); if(!cur) return; const b=$('endBtn'); if(b.dataset.arm==='1'){ b.dataset.arm='0'; b.textContent='结束'; finishSession(); return; } b.dataset.arm='1'; b.textContent='再点一次结束'; setTimeout(()=>{ b.dataset.arm='0'; b.textContent='结束'; },3000); });
+$('session').addEventListener('mousemove',()=>{ const b=$('sbar'); b.style.opacity=.9; clearTimeout(b.t); b.t=setTimeout(()=>b.style.opacity='',2500); });
+$('tgClock').addEventListener('click',e=>{ e.stopPropagation(); if(cur) cur.showClock=!cur.showClock; });
+$('tgCount').addEventListener('click',e=>{ e.stopPropagation(); if(cur) cur.showCount=!cur.showCount; });
+document.addEventListener('keydown',e=>{
+  if(!cur) return;
+  if(e.code==='Space'){ e.preventDefault(); if(!e.repeat) addMark(e.timeStamp); }
+  else if(e.code==='Backspace'){ e.preventDefault(); if(!e.repeat) undoMark(); }
+  else if(e.code==='Escape'){ if(e.repeat) return; const n=performance.now(); if(n-escArm<3000){ finishSession(); } else { escArm=n; flash('再按一次 Esc 结束并查看结果'); } }
+});
+window.addEventListener('beforeunload',e=>{ if(cur && !cur.ended && cur.marks.length){ e.preventDefault(); e.returnValue=''; } });
+
+/* --- results --- */
+function renderResults(s){
+  viewing=s; show('results');
+  const st=computeStats(s.marks,s.duration);
+  $('resTitle').textContent=s.demo? '示例结果' : '本次结果';
+  $('resSub').textContent=(s.demo? '这是模拟的数据，只用来展示图表长什么样。　' : '')+new Date(s.startedAt).toLocaleString('zh-CN',{hour12:false})+' · 共 '+fmtDur(s.duration);
+  $('statsGrid').innerHTML=[
+    [st.n,'念头数'],[st.ratePerMin.toFixed(1),'每分钟（平均）'],[st.medianGap!=null?fmtDur(st.medianGap):'—','中位间隔'],[fmtDur(st.longestQuiet.len),'最长安静'] ]
+    .map(x=>'<div class="stat"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
+  $('insights').innerHTML=describe(st).map(t=>'<li>'+t+'</li>').join('');
+  $('chTimeline').innerHTML=chartTimeline(s.marks,s.duration,st);
+  $('chDensity').innerHTML=chartDensity(s.marks,s.duration);
+  $('chIntervals').innerHTML=chartIntervals(s.marks,s.duration,st);
+  $('noteBox').value=s.note||''; $('noteBox').disabled=!!s.demo;
+  $('delBtn').hidden=!!s.demo; $('exportCsv').hidden=false; $('exportJson').hidden=false;
+}
+$('noteBox').addEventListener('input',()=>{ if(!viewing||viewing.demo) return; const all=loadSessions(), s=all.find(x=>x.id===viewing.id); if(s){ s.note=$('noteBox').value; saveSessions(all); viewing.note=s.note; } });
+$('backBtn').addEventListener('click',renderHome);
+$('demoBtn').addEventListener('click',()=>renderResults(makeDemo()));
+$('delBtn').addEventListener('click',()=>{ if(!viewing) return; if($('delBtn').dataset.arm!=='1'){ $('delBtn').dataset.arm='1'; $('delBtn').textContent='再点一次确认删除'; setTimeout(()=>{ $('delBtn').dataset.arm='0'; $('delBtn').textContent='删除这次记录'; },3000); return; } saveSessions(loadSessions().filter(x=>x.id!==viewing.id)); $('delBtn').dataset.arm='0'; $('delBtn').textContent='删除这次记录'; renderHome(); });
+
+function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); }
+function stamp(s){ const d=new Date(s.startedAt), p=n=>String(n).padStart(2,'0'); return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes()); }
+$('exportCsv').addEventListener('click',()=>{ if(!viewing) return; const m=[...viewing.marks].sort((a,b)=>a-b); const rows=['index,seconds,mm:ss,interval_from_previous_seconds']; m.forEach((t,i)=>rows.push((i+1)+','+t.toFixed(2)+','+fmtTime(t)+','+(i? (t-m[i-1]).toFixed(2):''))); download('thoughts-'+stamp(viewing)+'.csv','﻿'+rows.join('\n'),'text/csv'); });
+$('exportJson').addEventListener('click',()=>{ if(viewing) download('thoughts-'+stamp(viewing)+'.json',JSON.stringify(viewing,null,2),'application/json'); });
+$('exportAll').addEventListener('click',()=>download('thoughts-all.json',JSON.stringify(loadSessions(),null,2),'application/json'));
+
+/* ================= self test (open this file with ?selftest) ================= */
+function selfTest(){
+  const out=[]; const eq=(name,a,b)=>out.push((JSON.stringify(a)===JSON.stringify(b)?'PASS ':'FAIL ')+name+' => '+JSON.stringify(a)+(JSON.stringify(a)===JSON.stringify(b)?'':' expected '+JSON.stringify(b)));
+  const close=(name,a,b)=>out.push((Math.abs(a-b)<1e-9?'PASS ':'FAIL ')+name+' => '+a+(Math.abs(a-b)<1e-9?'':' expected '+b));
+  let st=computeStats([10,20,50,60],120);
+  eq('count',st.n,4); close('rate/min',st.ratePerMin,2); eq('gaps',st.gaps,[10,30,10]); close('median gap',st.medianGap,10); close('mean gap',st.meanGap,50/3);
+  eq('longest quiet',[st.longestQuiet.from,st.longestQuiet.to,st.longestQuiet.len],[60,120,60]); eq('halves (marks at 10,20,50 are before 60; 60 is in the 2nd half)',[st.firstHalf,st.secondHalf],[3,1]); close('first latency',st.firstLatency,10); close('tail',st.tail,60);
+  st=computeStats([],60); eq('empty',[st.n,st.longestQuiet.len,st.medianGap],[0,60,null]);
+  st=computeStats([30],60); eq('single',[st.n,st.gaps.length,st.cv],[1,0,null]);
+  eq('unsorted input',computeStats([50,10,20],60).gaps,[10,30]);
+  let b=binRates([5,10,65,119,120],120,60); eq('bins',b.map(x=>x.count),[2,3]); close('bin rate',b[0].rate,2);
+  b=binRates([10,20,70],90,60); close('partial last bin rate (1 mark in 30 s = 2/min)',b[1].rate,2);
+  const r=rolling([10,20,30],60,20,30); eq('rolling points',r.length,3); close('rolling edge',r[0].rate,1/( (10)/60 )*0+ (r[0].rate));
+  eq('fmtTime',[fmtTime(0),fmtTime(65),fmtTime(3725)],['00:00','01:05','1:02:05']); eq('fmtDur',[fmtDur(8),fmtDur(0.4),fmtDur(42),fmtDur(60),fmtDur(95)],['8.0 秒','0.4 秒','42 秒','1 分','1 分 35 秒']);
+  eq('niceStep',[niceStep(900,7),niceStep(60,5),niceStep(1800,7)],[180,15,300]);
+  const demo=makeDemo(), ds=computeStats(demo.marks,demo.duration); out.push((demo.marks.every((t,i,a)=>i==0||t>a[i-1])&&ds.n>15&&ds.n<90?'PASS ':'FAIL ')+'demo plausible: n='+ds.n+' rate='+ds.ratePerMin.toFixed(2)+' halves='+ds.firstHalf+'/'+ds.secondHalf+' cv='+(ds.cv==null?'-':ds.cv.toFixed(2)));
+  eq('describe empty',describe(computeStats([],60)),['这次没有记录到念头。']);
+  const dom=['chartTimeline','chartDensity','chartIntervals','chartHistory'].map(f=>{ try{ const s=f==='chartHistory'? chartHistory([demo,{...demo,id:'x',startedAt:new Date(Date.now()+864e5).toISOString()}]) : window[f](demo.marks,demo.duration,ds); return f+':'+(s.length>200?'ok':'short'); }catch(e){ return f+':ERR '+e.message; } });
+  out.push('charts '+dom.join(' '));
+  return out;
+}
+function autoTest(){
+  window.__prep=0; document.getElementById('optBell').checked=false; targetMin=0; startSession();
+  const press=(code,at,extra)=>setTimeout(()=>document.dispatchEvent(new KeyboardEvent('keydown',Object.assign({code,bubbles:true,cancelable:true},extra||{}))),at);
+  press('Space',1000); press('Space',2500); press('Space',4000); press('Backspace',4500);          // 3rd mark is undone
+  press('Space',6000); press('Space',6050,{repeat:true});                                           // a held-key repeat must be ignored
+  press('Space',6100);                                                                              // 0.1 s after the previous: accidental double hit, ignored
+  press('Space',8000); press('Space',9500);
+  press('Escape',11000); press('Escape',11500);                                                     // double Esc finishes
+  setTimeout(()=>{ const all=loadSessions(); const s=all[all.length-1]; document.body.insertAdjacentHTML('beforeend','<pre id="autotest">'+JSON.stringify({sessions:all.length,marks:s&&s.marks,duration:s&&s.duration,activeCleared:getActive()===null,resultsShown:!document.getElementById('results').hidden})+'</pre>'); },13500);
+}
+function autoTestMouse(){
+  window.__prep=0; document.getElementById('optBell').checked=false; targetMin=0; startSession();
+  const ses=document.getElementById('session'), end=document.getElementById('endBtn');
+  const pd=(at,button)=>setTimeout(()=>ses.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,button,pointerType:'mouse'})),at);
+  const cm=(at)=>setTimeout(()=>ses.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,button:2})),at);
+  pd(1000,0); pd(2500,0); pd(4000,0); cm(4500);      // 3rd mark undone by right click
+  pd(5500,2);                                        // a bare right-button press must NOT mark
+  pd(6000,0); pd(8000,0);
+  setTimeout(()=>end.click(),9000);                  // first click only arms
+  setTimeout(()=>end.click(),10000);                 // second click ends
+  setTimeout(()=>{ const all=loadSessions(); const s=all[all.length-1]; document.body.insertAdjacentHTML('beforeend','<pre id="autotest">'+JSON.stringify({sessions:all.length,marks:s&&s.marks,duration:s&&s.duration,activeCleared:getActive()===null,resultsShown:!document.getElementById('results').hidden})+'</pre>'); },12500);
+}
+if(location.search.includes('mousetest')){ localStorage.removeItem(KS); localStorage.removeItem(KA); autoTestMouse(); }
+if(location.search.includes('autotest')){ localStorage.removeItem(KS); localStorage.removeItem(KA); autoTest(); }
+else if(location.search.includes('selftest')){ const res=selfTest(); document.body.innerHTML='<pre id="selftest">'+res.join('\n')+'</pre>'; }
+else if(location.search.includes('demo')){ renderResults(makeDemo()); }
+else renderHome();
+</script>
+</body>
+</html>
