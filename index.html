@@ -27,7 +27,8 @@ main{margin:0}
 .wrap{max-width:1000px;margin:0 auto;padding-inline:20px}
 .narrow{max-width:640px;margin-inline:auto}
 .site-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:22px 24px}
-.site-head .brand{justify-self:start;font-size:27px;font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.2px}
+.site-head .brand{justify-self:start;font-size:27px;font-weight:700;color:var(--ink);letter-spacing:-.2px;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:2px;text-underline-offset:7px}
+.site-head .brand:hover{color:var(--accent2)}
 .site-head .nav-mid{justify-self:center}
 .site-head .nav-end{justify-self:end}
 .site-head a.pill{display:inline-block;font-weight:400;color:var(--ink);text-decoration:none;padding:12px 26px;border:1px solid var(--accent);border-radius:100px;line-height:1.2}
@@ -43,6 +44,24 @@ main{margin:0}
 .hero .banner{text-align:left}
 .sec{text-align:center;font-size:clamp(24px,4.2vw,32px);margin:56px 0 22px}
 .wrap .how{max-width:640px;margin:0 auto 6px;padding-left:22px}
+.ico{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ib{flex:none;width:40px;height:40px;border-radius:50%;background:rgba(61,148,121,.14);color:var(--accent2);display:grid;place-items:center}
+.hero-ico{position:relative;width:76px;height:76px;margin:0 auto 14px;border-radius:50%;background:rgba(255,255,255,.62);color:var(--accent2);display:grid;place-items:center}
+.hero-ico .ico{width:38px;height:38px;stroke-width:1.5}
+.hero-ico i{position:absolute;left:50%;top:6px;width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:0;animation:rise 6s ease-in infinite}
+.hero-ico i:nth-of-type(2){left:34%;width:5px;height:5px;animation-delay:2s}
+.hero-ico i:nth-of-type(3){left:64%;width:5px;height:5px;animation-delay:4s}
+@keyframes rise{0%{transform:translateY(8px);opacity:0}20%{opacity:.7}100%{transform:translateY(-44px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.hero-ico i{animation:none}}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px}
+.step{background:var(--card);border-radius:22px;padding:24px 22px}
+.step .ib{margin-bottom:14px}
+.step h3{font-size:18px;font-weight:700;margin:0 0 6px}
+.step p{margin:0;font-size:15.5px;line-height:1.6}
+.look{background:var(--card);border-radius:24px;padding:26px 30px 14px;margin:0 0 22px}
+.look h3{font-size:17px;font-weight:700;margin:6px 0 2px}
+.look p.cap{margin:0 0 8px;font-size:15px;color:var(--muted)}
+.look .more{display:flex;justify-content:center;padding:6px 0 14px}
 .site-foot{padding:10px 20px 56px;color:var(--muted);font-size:14px;display:flex;gap:8px 20px;flex-wrap:wrap;align-items:center;justify-content:space-between;max-width:1000px;margin:0 auto}
 .site-foot a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px}
 .site-foot .links{display:flex;gap:6px 18px;flex-wrap:wrap}
@@ -65,13 +84,23 @@ h2{font-size:20px;line-height:1.3;margin:0 0 12px;font-weight:700;text-wrap:bala
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .chips button,.btn{font:inherit;font-weight:400;border:1px solid var(--accent);background:transparent;color:var(--ink);padding:8px 18px;border-radius:100px;cursor:pointer;transition:background .15s}
 .chips button:hover,.btn:hover{background:var(--soft)}
+.durrow{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+.durrow select,.durrow input{font:inherit;font-weight:400;color:var(--ink);height:48px;border:1px solid var(--accent);border-radius:100px;background-color:var(--soft)}
+.durrow select{appearance:none;-webkit-appearance:none;padding:0 46px 0 22px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1.5l6 6 6-6' fill='none' stroke='%233d9479' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 20px center}
+.durrow input{width:132px;padding:0 16px;font-variant-numeric:tabular-nums}
+.durrow .cin{display:inline-flex;align-items:center;gap:8px}
+.durrow .unit{color:var(--muted);font-size:15px}
+.durrow select:focus-visible,.durrow input:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.durrow.custom-on select{opacity:.45}
 .chips .custom{display:inline-flex;align-items:center;gap:6px}
 .chips .custom input{font:inherit;width:84px;padding:7px 12px;border:1px solid var(--accent);border-radius:100px;background:var(--soft);color:var(--ink);font-variant-numeric:tabular-nums}
 .chips .custom input:focus{outline:2px solid var(--accent);outline-offset:1px}
 .chips .custom .unit{color:var(--muted);font-size:14px}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 32px}
-.why{margin:0;padding-left:18px;color:var(--ink)}
-.why li{margin:8px 0;line-height:1.55}
+.why{margin:0;padding:0;list-style:none;color:var(--ink)}
+.why li{margin:0 0 14px;line-height:1.55;display:flex;gap:14px;align-items:flex-start}
+.why li>div{padding-top:1px}
+.why .ib{background:rgba(255,255,255,.7)}
 .why b{font-weight:600}
 .chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);padding:16px 40px;font-size:18px;font-weight:400;border-radius:12px}
@@ -139,30 +168,50 @@ table.hist tr.link:hover{background:var(--soft)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 17.5h9.6a3.6 3.6 0 0 0 .5-7.2A5.2 5.2 0 0 0 7.2 9.4 4.1 4.1 0 0 0 7 17.5z"/><circle cx="9.6" cy="12.6" r=".5"/><circle cx="14.4" cy="12.6" r=".5"/><path d="M10.6 14.7q1.4 1.2 2.8 0"/><circle cx="6.3" cy="20.4" r="1.1"/><circle cx="3.6" cy="22.2" r=".6"/></symbol>
+<symbol id="i-ripple" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="5.6"/><circle cx="12" cy="12" r="9" opacity=".5"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="3"/><path d="M10.5 18.5h3"/><circle cx="12" cy="10" r="1.6"/><circle cx="12" cy="10" r="4" opacity=".5"/></symbol>
+<symbol id="i-keys" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="3.2"/><path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M7.5 14h9"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 1.6H4.4z"/><path d="M10 20.6a2 2 0 0 0 4 0"/></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19.5C5 11 9.5 5.5 19.5 4.5c0 9.5-4.3 14.5-12.7 14.5"/><path d="M5 19.5c2.2-4.2 5.2-7.2 9.2-9.2"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+<symbol id="i-bubbles" viewBox="0 0 24 24"><circle cx="9" cy="14.5" r="5.2"/><circle cx="17.4" cy="7.6" r="3"/><circle cx="18.6" cy="16.8" r="1.8"/></symbol>
+<symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 9h10.5a3 3 0 1 0-3-3"/><path d="M3 14h15a3 3 0 1 1-3 3"/></symbol>
+<symbol id="i-bars" viewBox="0 0 24 24"><path d="M4 20h16"/><rect x="5.5" y="12" width="3.4" height="6" rx="1"/><rect x="10.3" y="7" width="3.4" height="11" rx="1"/><rect x="15.1" y="10" width="3.4" height="8" rx="1"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></symbol>
+<symbol id="i-gap" viewBox="0 0 24 24"><circle cx="4.5" cy="12" r="2"/><circle cx="19.5" cy="12" r="2"/><path d="M8.8 12h6.4" stroke-dasharray="1.2 2.6"/></symbol>
+<symbol id="i-burst" viewBox="0 0 24 24"><circle cx="7" cy="8" r="1.5"/><circle cx="12" cy="6" r="1.5"/><circle cx="16.6" cy="9.4" r="1.5"/><circle cx="9.6" cy="12.8" r="1.5"/><circle cx="14.6" cy="14.4" r="1.5"/><circle cx="19" cy="19" r="1.1"/><circle cx="4.8" cy="19" r="1.1"/></symbol>
+<symbol id="i-halves" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M6.6 8.6h.01M8.6 14h.01M9.4 17.6h.01M15.4 12h.01"/></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17.5l5.2-6 4 3 6.3-8"/><path d="M14.8 6.5h3.9v3.9"/></symbol>
+</defs></svg>
 <main id="app">
 
 <!-- ================= HOME ================= -->
 <section id="home">
   <div class="band">
     <header class="site-head">
-      <a class="brand" href="https://mengchen.co">Meng Chen Coaching</a>
+      <a class="brand" href="https://mengchen.co" title="Visit mengchen.co">Meng Chen Coaching</a>
       <nav class="nav-mid" aria-label="Site"><a class="pill" href="https://mengchen.co/blogs/">Blogs</a></nav>
       <nav class="nav-end" aria-label="Book a call"><a class="cta" href="https://tidycal.com/mengchen/clarity">Connect</a></nav>
     </header>
     <div class="hero">
+      <div class="hero-ico" aria-hidden="true"><i></i><i></i><i></i><svg class="ico"><use href="#i-cloud"/></svg></div>
       <h1>Thoughts Counter during meditation</h1>
       <p class="sub">Tap each time you notice a thought. When you finish, see how dense your thoughts were and how far apart they came.</p>
       <div id="recoverBox" class="banner" hidden></div>
-      <div class="row chips" id="durChips" role="group" aria-label="Duration">
-      <button data-min="5">5 min</button>
-      <button data-min="10">10 min</button>
-      <button data-min="15" aria-pressed="true">15 min</button>
-      <button data-min="20">20 min</button>
-      <button data-min="30">30 min</button>
-      <button data-min="0">Open-ended</button>
-      <span class="custom" id="customWrap"><button data-min="custom" id="customBtn" aria-pressed="false">Custom</button><input id="customMin" type="number" inputmode="numeric" min="1" max="480" step="1" placeholder="25" aria-label="Custom length in minutes"><span class="unit">min</span></span>
-    </div>
-    <p class="note" id="durMsg" role="status" style="margin:8px 0 0"></p>
+      <div class="durrow" id="durField">
+        <select id="durSel" aria-label="Session length">
+          <option value="5">5 min</option>
+          <option value="10">10 min</option>
+          <option value="15" selected>15 min</option>
+          <option value="20">20 min</option>
+          <option value="30">30 min</option>
+          <option value="0">Open-ended</option>
+        </select>
+        <span class="cin"><input id="customMin" type="number" inputmode="numeric" min="1" max="480" step="1" placeholder="Custom" aria-label="Custom length in minutes"><span class="unit">min</span></span>
+      </div>
+      <p class="note" id="durMsg" role="status" style="margin:10px 0 0;min-height:1.4em"></p>
       <div class="row opts">
       <label class="opt"><input type="checkbox" id="optBell" checked> Ring a bell at the end (needs a set length)</label>
       <label class="opt"><input type="checkbox" id="optTick"> Soft click on each tap</label>
@@ -178,12 +227,24 @@ table.hist tr.link:hover{background:var(--soft)}
 
   <div class="wrap">
     <h2 class="sec">How it works</h2>
-    <ul class="how">
-      <li>After you press Start you get 10 seconds to settle in. The clock starts after that.</li>
-      <li><b>On a phone:</b> tap the big button, or anywhere on the screen, for each thought. Tap <b>Undo</b> (top right) if you slip.</li>
-      <li><b>On a computer:</b> press <kbd>Space</kbd> or left-click anywhere. Undo the last one with <kbd>Backspace</kbd> or a right-click.</li>
-      <li><b>To finish:</b> it ends by itself at the set length. Or tap <b>End</b> (top right, twice to confirm), or press <kbd>Esc</kbd> twice.</li>
-    </ul>
+    <div class="steps">
+      <div class="step"><span class="ib"><svg class="ico"><use href="#i-leaf"/></svg></span><h3>Settle in</h3><p>You get 10 seconds after pressing Start. The clock begins once you are ready.</p></div>
+      <div class="step"><span class="ib"><svg class="ico"><use href="#i-phone"/></svg></span><h3>On a phone</h3><p>Tap the big button, or anywhere on the screen, for each thought. Tap <b>Undo</b> if you slip.</p></div>
+      <div class="step"><span class="ib"><svg class="ico"><use href="#i-keys"/></svg></span><h3>On a computer</h3><p>Press <kbd>Space</kbd> or left-click anywhere. <kbd>Backspace</kbd> or a right-click undoes the last one.</p></div>
+      <div class="step"><span class="ib"><svg class="ico"><use href="#i-bell"/></svg></span><h3>Finish</h3><p>It ends by itself at the set length. Or tap <b>End</b> (twice), or press <kbd>Esc</kbd> twice.</p></div>
+    </div>
+
+    <h2 class="sec">What you will see</h2>
+    <div class="look">
+      <h3>Timeline</h3>
+      <p class="cap">When each thought came, with your longest quiet stretch shaded.</p>
+      <div id="pvTimeline"></div>
+      <h3>Density</h3>
+      <p class="cap">Thoughts per minute, with a smoothed trend line.</p>
+      <div id="pvDensity"></div>
+      <p class="cap" style="margin-top:4px">Example data. You also get a chart of the gaps between thoughts.</p>
+      <div class="more"><button class="btn ghost" id="demoBtn2">See the full example</button></div>
+    </div>
 
     <h2 class="sec">Why it helps</h2>
     <div class="card" id="whyCard">
@@ -191,20 +252,20 @@ table.hist tr.link:hover{background:var(--soft)}
       <div>
         <h2>Why count your thoughts?</h2>
         <ul class="why">
-          <li><b>Noticing is the practice.</b> Each tap marks the moment you realise your attention has drifted from your anchor. That moment of recognition is the skill you are training.</li>
-          <li><b>It makes the mind visible.</b> Thoughts feel constant and shapeless. Counting turns them into separate events you can see, compare and come back to.</li>
-          <li><b>It keeps you out of the story.</b> A quick tap is lighter than following a thought or judging yourself for having it.</li>
-          <li><b>It gives you something to look at afterwards.</b> Patterns that are hard to feel in the moment show up clearly on the chart.</li>
+          <li><span class="ib"><svg class="ico"><use href="#i-eye"/></svg></span><div><b>Noticing is the practice.</b> Each tap marks the moment you realise your attention has drifted from your anchor. That moment of recognition is the skill you are training.</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-bubbles"/></svg></span><div><b>It makes the mind visible.</b> Thoughts feel constant and shapeless. Counting turns them into separate events you can see, compare and come back to.</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-wind"/></svg></span><div><b>It keeps you out of the story.</b> A quick tap is lighter than following a thought or judging yourself for having it.</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-bars"/></svg></span><div><b>It gives you something to look at afterwards.</b> Patterns that are hard to feel in the moment show up clearly on the chart.</div></li>
         </ul>
       </div>
       <div>
         <h2>What you can observe</h2>
         <ul class="why">
-          <li><b>Settling time.</b> How long did it take for the first thought to come?</li>
-          <li><b>Quiet stretches.</b> How long was your longest gap, and what came right before it?</li>
-          <li><b>Bursts or an even flow.</b> Thoughts often arrive in clusters. A cluster can follow a trigger such as a sound, an itch or a worry.</li>
-          <li><b>First half vs. second half.</b> Do you settle as the session goes on, or get restless?</li>
-          <li><b>Across sessions.</b> Use the notes (sleep, time of day, stress, caffeine) and the history chart to see what changes the pattern.</li>
+          <li><span class="ib"><svg class="ico"><use href="#i-clock"/></svg></span><div><b>Settling time.</b> How long did it take for the first thought to come?</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-gap"/></svg></span><div><b>Quiet stretches.</b> How long was your longest gap, and what came right before it?</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-burst"/></svg></span><div><b>Bursts or an even flow.</b> Thoughts often arrive in clusters. A cluster can follow a trigger such as a sound, an itch or a worry.</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-halves"/></svg></span><div><b>First half vs. second half.</b> Do you settle as the session goes on, or get restless?</div></li>
+          <li><span class="ib"><svg class="ico"><use href="#i-trend"/></svg></span><div><b>Across sessions.</b> Use the notes (sleep, time of day, stress, caffeine) and the history chart to see what changes the pattern.</div></li>
         </ul>
       </div>
     </div>
@@ -231,7 +292,7 @@ table.hist tr.link:hover{background:var(--soft)}
 <section id="results" hidden>
   <div class="band">
     <header class="site-head">
-      <a class="brand" href="https://mengchen.co">Meng Chen Coaching</a>
+      <a class="brand" href="https://mengchen.co" title="Visit mengchen.co">Meng Chen Coaching</a>
       <nav class="nav-mid" aria-label="Site"><a class="pill" href="https://mengchen.co/blogs/">Blogs</a></nav>
       <nav class="nav-end" aria-label="Book a call"><a class="cta" href="https://tidycal.com/mengchen/clarity">Connect</a></nav>
     </header>
@@ -427,29 +488,27 @@ function getActive(){ try{ return JSON.parse(localStorage.getItem(KA)||'null'); 
 const $=id=>document.getElementById(id);
 let targetMin=15, cur=null, tickTimer=null, escArm=0, viewing=null, audio=null, wake=null;
 
-let customOn=false;
-function pickChip(b){ document.querySelectorAll('#durChips button').forEach(x=>x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true'); $('durMsg').textContent=''; }
-document.querySelectorAll('#durChips button').forEach(b=>b.addEventListener('click',()=>{
-  pickChip(b);
-  if(b.dataset.min==='custom'){ customOn=true; $('customMin').focus(); }
-  else { customOn=false; targetMin=+b.dataset.min; }
-}));
-$('customMin').addEventListener('input',()=>{ pickChip($('customBtn')); customOn=true; });
-$('customMin').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('startBtn').click(); } });
+const durSel=$('durSel'), customIn=$('customMin');
+function syncDur(){ $('durField').classList.toggle('custom-on', customIn.value.trim()!==''); }
+durSel.addEventListener('change',()=>{ targetMin=+durSel.value; customIn.value=''; $('durMsg').textContent=''; syncDur(); });
+customIn.addEventListener('input',()=>{ $('durMsg').textContent=''; syncDur(); });
+customIn.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('startBtn').click(); } });
 function startFromHome(){
-  if(customOn){
-    const v=parseFloat($('customMin').value);
-    if(!(v>=1 && v<=480)){ $('durMsg').textContent='Enter a length between 1 and 480 minutes.'; $('customMin').focus(); return; }
+  const raw=customIn.value.trim();
+  if(raw!==''){
+    const v=parseFloat(raw);
+    if(!(v>=1 && v<=480)){ $('durMsg').textContent='Enter a length between 1 and 480 minutes.'; customIn.focus(); return; }
     targetMin=v;
-  }
+  } else targetMin=+durSel.value;
   startSession();
 }
 
 function show(which){ ['home','results'].forEach(id=>$(id).hidden=(id!==which)); window.scrollTo(0,0); }
 function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
+function renderPreview(){ const d=makeDemo(), st=computeStats(d.marks,d.duration); $('pvTimeline').innerHTML=chartTimeline(d.marks,d.duration,st); $('pvDensity').innerHTML=chartDensity(d.marks,d.duration); }
 function renderHome(){
-  show('home');
+  show('home'); renderPreview();
   const ss=loadSessions().sort((a,b)=>a.startedAt<b.startedAt?1:-1);
   $('histCard').hidden=!ss.length;
   $('histTrend').innerHTML=chartHistory(ss);
@@ -554,6 +613,7 @@ function renderResults(s){
 $('noteBox').addEventListener('input',()=>{ if(!viewing||viewing.demo) return; const all=loadSessions(), s=all.find(x=>x.id===viewing.id); if(s){ s.note=$('noteBox').value; saveSessions(all); viewing.note=s.note; } });
 $('backBtn').addEventListener('click',renderHome);
 $('demoBtn').addEventListener('click',()=>renderResults(makeDemo()));
+$('demoBtn2').addEventListener('click',()=>renderResults(makeDemo()));
 $('delBtn').addEventListener('click',()=>{ if(!viewing) return; if($('delBtn').dataset.arm!=='1'){ $('delBtn').dataset.arm='1'; $('delBtn').textContent='Click again to confirm'; setTimeout(()=>{ $('delBtn').dataset.arm='0'; $('delBtn').textContent='Delete this session'; },3000); return; } saveSessions(loadSessions().filter(x=>x.id!==viewing.id)); $('delBtn').dataset.arm='0'; $('delBtn').textContent='Delete this session'; renderHome(); });
 
 function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); }
