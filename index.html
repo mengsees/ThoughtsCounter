@@ -121,27 +121,36 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width
 ul.how{margin:6px 0 0;padding-left:20px;color:var(--muted)}
 ul.how li{margin:3px 0}
 
+.settings{margin:14px auto 0;max-width:420px;text-align:left;color:var(--muted);font-size:15px}
+.settings summary{cursor:pointer;text-align:center;list-style:none}
+.settings summary::-webkit-details-marker{display:none}
+.settings summary::after{content:" \25B8"}
+.settings[open] summary::after{content:" \25BE"}
+.optlist{display:grid;gap:8px;margin-top:10px}
+ul.plain{max-width:640px;margin:0 auto 18px;padding-left:22px;line-height:1.6}
+ul.plain li{margin:0 0 8px}
+
 /* ---- live session ---- */
 #session{position:fixed;inset:0;background:var(--s-bg);color:var(--s-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;user-select:none;-webkit-user-select:none;cursor:pointer;touch-action:manipulation}
-#orb{width:min(46vmin,360px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 42%,var(--s-btn1) 0,var(--s-btn2) 70%);box-shadow:0 0 90px var(--s-glow);position:relative;animation:breathe 9s ease-in-out infinite}
+#orb{display:none;width:min(46vmin,360px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 42%,var(--s-btn1) 0,var(--s-btn2) 70%);box-shadow:0 0 90px var(--s-glow);position:relative;animation:breathe 9s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:scale(.94)}50%{transform:scale(1.04)}}
 @media (prefers-reduced-motion:reduce){#orb{animation:none}}
 .ripple{position:absolute;inset:0;border-radius:50%;border:2px solid var(--s-ripple);animation:rip 1.5s ease-out forwards;pointer-events:none}
 @keyframes rip{from{transform:scale(1);opacity:.9}to{transform:scale(1.9);opacity:0}}
-#clock{margin-top:34px;font-size:34px;letter-spacing:3px;font-variant-numeric:tabular-nums;color:var(--s-ink)}
+#clock{margin-top:0;font-size:34px;letter-spacing:3px;font-variant-numeric:tabular-nums;color:var(--s-ink)}
 #count{margin-top:6px;font-size:15px;color:var(--s-muted);min-height:24px}
 #foot{position:absolute;left:0;right:0;bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px}
 #hint{flex:1;text-align:center;font-size:13px;color:var(--s-hint)}
 #cancelBtn{font:inherit;font-size:13px;background:transparent;color:var(--s-ink);border:1px solid var(--s-line);border-radius:999px;padding:5px 14px;cursor:pointer;flex:none}
 #sbar{position:absolute;top:16px;right:16px;display:flex;gap:8px;opacity:.55;transition:opacity .4s}
 #sbar button{font:inherit;font-size:13px;background:transparent;color:var(--s-ink);border:1px solid var(--s-line);border-radius:999px;padding:4px 12px;cursor:pointer}
-#big{margin-top:30px;width:min(62vw,250px,34vh);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(18px,5vw,24px);letter-spacing:.3px;line-height:1.25;color:var(--s-btn-ink);background:radial-gradient(circle at 50% 38%,var(--s-btn1) 0,var(--s-btn2) 75%);border:1px solid var(--s-btn-line);box-shadow:0 0 60px var(--s-glow);transition:transform .08s,background .08s;-webkit-tap-highlight-color:transparent}
+#big{margin-top:20px;width:min(70vw,440px,52vh);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(22px,4vw,34px);letter-spacing:.3px;line-height:1.25;color:var(--s-btn-ink);background:radial-gradient(circle at 50% 38%,var(--s-btn1) 0,var(--s-btn2) 75%);border:1px solid var(--s-btn-line);box-shadow:0 0 60px var(--s-glow);transition:transform .08s,background .08s;-webkit-tap-highlight-color:transparent}
 #session.down #big{transform:scale(.94);background:radial-gradient(circle at 50% 38%,var(--s-down1) 0,var(--s-down2) 75%)}
 #session{-webkit-touch-callout:none;padding-bottom:env(safe-area-inset-bottom,0px)}
 /* phone: the button is the screen; everything else shrinks to a thin strip */
 @media (pointer:coarse),(max-width:600px){
   #orb{display:none}
-  #big{position:absolute;margin:0;left:14px;right:14px;top:calc(56px + env(safe-area-inset-top,0px));bottom:calc(44px + env(safe-area-inset-bottom,0px));width:auto;aspect-ratio:auto;border-radius:44px;font-size:clamp(28px,9vw,44px);letter-spacing:.5px;line-height:1.25;animation:breatheBig 9s ease-in-out infinite;overflow:hidden}
+  #big{position:absolute;margin:0;left:14px;right:14px;top:calc(56px + env(safe-area-inset-top,0px));bottom:calc(44px + env(safe-area-inset-bottom,0px));width:auto;aspect-ratio:auto;border-radius:44px;font-size:clamp(28px,9vw,44px);letter-spacing:.5px;line-height:1.25;overflow:hidden}
   #big .ripple{border-radius:inherit;border-width:3px}
   #sbar{top:calc(10px + env(safe-area-inset-top,0px));right:14px;gap:6px;opacity:.7}
   #sbar button{font-size:12px;padding:6px 10px}
@@ -209,7 +218,7 @@ table.hist tr.link:hover{background:var(--soft)}
     <div class="hero">
       <div class="hero-ico" aria-hidden="true"><i></i><i></i><i></i><svg class="ico"><use href="#i-cloud"/></svg></div>
       <h1>Thought Counter</h1>
-      <p class="sub">Practice observing your thoughts instead of being carried away by them. Tap each time you catch one, during meditation or any other time, and see the calm stretches between your thoughts.</p>
+      <p class="sub">Practice observing your thoughts instead of being carried away by them. Tap each time you catch one, and see the calm stretches in between.</p>
       <div id="recoverBox" class="banner" hidden></div>
       <div class="durrow" id="durField">
         <select id="durSel" aria-label="Session length">
@@ -223,13 +232,13 @@ table.hist tr.link:hover{background:var(--soft)}
         <span class="cin"><input id="customMin" type="number" inputmode="numeric" min="1" max="480" step="1" placeholder="Custom" aria-label="Custom length in minutes"><span class="unit">min</span></span>
       </div>
       <p class="note" id="durMsg" role="status" style="margin:10px 0 0;min-height:1.4em"></p>
-      <div class="row opts">
+      <details class="settings"><summary>Settings</summary>
+      <div class="optlist">
       <label class="opt"><input type="checkbox" id="optBell" checked> Ring a bell at the end (needs a set length)</label>
       <label class="opt"><input type="checkbox" id="optTick"> Soft click on each tap</label>
       <label class="opt"><input type="checkbox" id="optClock" checked> Show timer</label>
       <label class="opt"><input type="checkbox" id="optCount"> Show thought count</label>
-      <label class="opt"><input type="checkbox" id="optNight"> Night mode on the recording screen</label>
-    </div>
+      </div></details>
       <div class="row actions">
         <button class="btn primary" id="startBtn">Start</button>
         <button class="btn ghost" id="demoBtn">See an example chart</button>
@@ -239,49 +248,33 @@ table.hist tr.link:hover{background:var(--soft)}
 
   <div class="wrap">
     <h2 class="sec">How it works</h2>
-    <div class="steps">
-      <div class="step"><span class="ib"><svg class="ico"><use href="#i-leaf"/></svg></span><h3>Settle in</h3><p>You get 5 seconds after pressing Start. The clock begins once you are ready.</p></div>
-      <div class="step"><span class="ib"><svg class="ico"><use href="#i-phone"/></svg></span><h3>On a phone</h3><p>Tap the big button, or anywhere on the screen, for each thought. Tap <b>Undo</b> if you slip.</p></div>
-      <div class="step"><span class="ib"><svg class="ico"><use href="#i-keys"/></svg></span><h3>On a computer</h3><p>Press <kbd>Space</kbd> or left-click anywhere. <kbd>Backspace</kbd> or a right-click undoes the last one.</p></div>
-      <div class="step"><span class="ib"><svg class="ico"><use href="#i-bell"/></svg></span><h3>Finish</h3><p>It ends by itself at the set length. Or tap <b>End</b> (twice), or press <kbd>Esc</kbd> twice. <b>Cancel session</b> discards it.</p></div>
-    </div>
+    <ul class="plain">
+      <li>Rest your finger on the phone. When a thought comes, lift and tap once.</li>
+      <li>Tap Undo if you slip. The session ends at the set length, or tap End twice.</li>
+    </ul>
 
-    <h2 class="sec">What you will see</h2>
+    <h2 class="sec">What to look for</h2>
     <div class="look">
-      <h3>Your session at a glance</h3>
-      <p class="cap">Each line is a thought you observed. The space between two lines is the quiet between them, and your longest calm stretch is shaded.</p>
       <div id="pvTimeline"></div>
-      <p class="cap" style="margin-top:4px">Example data.</p>
+      <p class="cap" style="margin-top:4px">Each line is a thought. The space between lines is the quiet, and your longest calm stretch is shaded. Example data.</p>
       <div class="more"><button class="btn ghost" id="demoBtn2">See the full example</button></div>
     </div>
+    <ul class="plain">
+      <li><b>Settling time:</b> how long until the first thought came?</li>
+      <li><b>Calm stretches:</b> how long was the longest one, and what came right before it?</li>
+      <li><b>Bursts or an even flow:</b> clusters often follow a trigger, like a sound, an itch or a worry.</li>
+      <li><b>Across sessions:</b> add notes (sleep, time of day, stress, caffeine) and compare in Past sessions.</li>
+    </ul>
+    <p class="note narrow" style="text-align:center">A higher count is not worse. As you get better at observing, you may catch more thoughts, so watch the gaps, not the number.</p>
 
     <h2 class="sec">Why it helps</h2>
     <figure class="quote"><blockquote>&ldquo;We are not our thoughts, we are the existence that can observe it.&rdquo;</blockquote></figure>
-    <p class="lead">Observing is one of the most valuable skills you can train. Each time you catch a thought and tap, you practice stepping back and watching it pass, instead of being carried away by it. That steady practice is how we train our mind.</p>
-    <p class="lead">Use it during meditation, or at any other time: on a walk, at your desk, while you wait in line. Choose Open-ended or set a custom length, and tap whenever you catch a thought.</p>
-    <div class="card" id="whyCard">
-    <div class="cols">
-      <div>
-        <h2>Why count your thoughts?</h2>
-        <ul class="why">
-          <li><span class="ib"><svg class="ico"><use href="#i-eye"/></svg></span><div><b>Observing is the practice.</b> Each tap marks the moment you realize your attention has drifted from your anchor. That moment of recognition is the skill you are training.</div></li>
-          <li><span class="ib"><svg class="ico"><use href="#i-bubbles"/></svg></span><div><b>It makes the mind visible.</b> Thoughts feel constant and shapeless. Counting turns them into separate events you can see, compare and come back to.</div></li>
-          <li><span class="ib"><svg class="ico"><use href="#i-wind"/></svg></span><div><b>It keeps you out of the story.</b> A quick tap is lighter than following a thought or judging yourself for having it.</div></li>
-          <li><span class="ib"><svg class="ico"><use href="#i-bars"/></svg></span><div><b>It gives you something to look at afterwards.</b> Patterns that are hard to feel in the moment show up clearly on the chart.</div></li>
-        </ul>
-      </div>
-      <div>
-        <h2>What you can observe</h2>
-        <ul class="why">
-          <li><span class="ib"><svg class="ico"><use href="#i-clock"/></svg></span><div><b>Settling time.</b> How long did it take for the first thought to come?</div></li>
-          <li><span class="ib"><svg class="ico"><use href="#i-gap"/></svg></span><div><b>Calm stretches.</b> How long was your longest calm stretch, and what came right before it?</div></li>
-          <li><span class="ib"><svg class="ico"><use href="#i-burst"/></svg></span><div><b>Bursts or an even flow.</b> Thoughts often arrive in clusters. A cluster can follow a trigger such as a sound, an itch or a worry.</div></li>
-          <li><span class="ib"><svg class="ico"><use href="#i-trend"/></svg></span><div><b>Across sessions.</b> Use the notes (sleep, time of day, stress, caffeine) and the Past sessions list to see what changes the pattern.</div></li>
-        </ul>
-      </div>
-    </div>
-    <p class="note" style="margin-bottom:0">A higher count is not worse. As you get better at observing, you may catch more thoughts, so look at the gaps rather than treating the number as a score. This is a self-report tool for curiosity, not a medical measurement.</p>
-  </div>
+    <p class="lead">Each tap marks the moment you notice your attention has drifted. That moment of noticing is the skill you are training, during meditation or any other time.</p>
+    <ul class="plain">
+      <li><b>It makes the mind visible.</b> Thoughts feel constant and shapeless. Counting turns them into separate events you can see and compare.</li>
+      <li><b>It keeps you out of the story.</b> A quick tap is lighter than following a thought or judging yourself for having it.</li>
+      <li><b>It shows you patterns.</b> What is hard to feel in the moment shows up clearly on the chart.</li>
+    </ul>
 
     <div class="card" id="histCard" hidden>
     <h2>Past sessions</h2>
@@ -290,7 +283,7 @@ table.hist tr.link:hover{background:var(--soft)}
       <button class="btn ghost" id="exportAll">Export all (JSON)</button>
     </div>
   </div>
-    <p class="note narrow" style="text-align:center">Your data stays in this browser on this device and is never uploaded. Clearing browser data erases it, so export anything you want to keep.</p>
+    <p class="note narrow" style="text-align:center">Your data stays in this browser and is never uploaded. Clearing browser data erases it, so export anything you want to keep. This is a self-report tool for curiosity, not a medical measurement.</p>
   </div>
   <footer class="site-foot">
     <span>A free meditation tool by <a href="https://mengchen.co" title="Visit mengchen.co">Meng Chen Coaching</a>, life and career coach.</span>
@@ -488,13 +481,10 @@ function renderHome(){
   } else box.hidden=true;
 }
 
-/* --- night mode (recording screen only; remembered on this device) --- */
+/* --- night mode: every recording starts in night mode; the button switches to day --- */
 function setNight(on){
-  $('session').classList.toggle('night',on); $('tgNight').setAttribute('aria-pressed',on?'true':'false'); $('tgNight').textContent=on?'Day':'Night'; $('optNight').checked=on;
-  try{ localStorage.setItem(KN,on?'1':'0'); }catch(e){}
+  $('session').classList.toggle('night',on); $('tgNight').setAttribute('aria-pressed',on?'true':'false'); $('tgNight').textContent=on?'Day':'Night';
 }
-try{ setNight(localStorage.getItem(KN)==='1'); }catch(e){ setNight(false); }
-$('optNight').addEventListener('change',()=>setNight($('optNight').checked));
 $('tgNight').addEventListener('click',e=>{ e.stopPropagation(); setNight(!$('session').classList.contains('night')); });
 
 /* --- audio (created on a user click so browsers allow it) --- */
@@ -506,12 +496,12 @@ function tick(){ if(!audio) return; const t=audio.currentTime, o=audio.createOsc
 function startSession(){
   ensureAudio();
   cur={ id:'s'+Date.now(), startedAt:new Date().toISOString(), target:targetMin*60, marks:[], t0:null, prep:(window.__prep!=null? window.__prep : 5), bell:$('optBell').checked, tickSound:$('optTick').checked, showClock:$('optClock').checked, showCount:$('optCount').checked, ended:false, belled:false };
-  $('session').hidden=false; $('app').hidden=true;
+  setNight(true); $('session').hidden=false; $('app').hidden=true;
   document.documentElement.requestFullscreen?.().catch(()=>{});
   try{ navigator.wakeLock?.request('screen').then(w=>wake=w).catch(()=>{}); }catch(e){}
   cur.prepEnd=performance.now()+cur.prep*1000;
   $('hint').textContent=matchMedia('(pointer:coarse),(max-width:600px)').matches? 'Tap anywhere to count a thought' : 'Space / left-click = a thought  ·  Backspace / right-click = undo  ·  End (top right) or Esc twice = finish';
-  tickTimer=setInterval(loop,200); loop();
+  tickTimer=setInterval(loop,500); loop();
 }
 function elapsed(){ return cur.t0==null? 0 : (performance.now()-cur.t0)/1000; }
 function loop(){
@@ -524,9 +514,9 @@ function loop(){
   }
   const e=elapsed();
   $('clock').style.visibility=cur.showClock?'visible':'hidden';
-  $('clock').textContent=cur.target? fmtTime(Math.max(0,cur.target-e)) : fmtTime(e);
-  $('count').textContent=cur.showCount? ('Thoughts '+cur.marks.length) : '';
-  if(Math.floor(e)%5===0) setActive({startedAt:cur.startedAt,target:cur.target,marks:cur.marks,elapsed:e});
+  const ct=cur.target? fmtTime(Math.max(0,cur.target-e)) : fmtTime(e); if(ct!==cur._ct){ cur._ct=ct; $('clock').textContent=ct; }
+  const cc=cur.showCount? ('Thoughts '+cur.marks.length) : ''; if(cc!==cur._cc){ cur._cc=cc; $('count').textContent=cc; }
+  if(!cur._sv || now-cur._sv>=5000){ cur._sv=now; setActive({startedAt:cur.startedAt,target:cur.target,marks:cur.marks,elapsed:e}); }
   if(cur.target && e>=cur.target && !cur.belled){ cur.belled=true; if(cur.bell) bell(); setTimeout(()=>finishSession(),cur.bell?3500:300); }
 }
 function flash(msg){ const f=$('flash'); f.textContent=msg; f.style.opacity=1; clearTimeout(flash.t); flash.t=setTimeout(()=>f.style.opacity=0,1600); }
